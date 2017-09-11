@@ -53,9 +53,11 @@ public class BTCPriceInfoFragment extends Fragment {
         updateBTCPriceInfo.clearAnimation();
     }
 
+
     public void fillFields(){
 
     }
+
     private void clearFields(){
 
     }

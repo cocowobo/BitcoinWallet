@@ -65,4 +65,16 @@
         android:layout_marginLeft="50dp"
         app:layout_constraintBaseline_toBaselineOf="@+id/btc_price_usd_label" />
 
+    <ImageButton
+        android:id="@+id/update_btc_price_info_button"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="@color/frameBackground"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/update_icon"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent" />
+
 </android.support.constraint.ConstraintLayout>

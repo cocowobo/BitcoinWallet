@@ -1,6 +1,20 @@
 <resources>
     <string name="app_name">BitcoinWallet</string>
     <string name="currency_USD_label">USD</string>
+    <string name="currency_BTC_label">BTC</string>
+
+    <string name="btc_transaction_header_purchase">Покупка</string>
+    <string name="btc_transaction_cost_header_purchase_usd_to_btc">Вы получите</string>
+    <string name="btc_transaction_cost_header_purchase_btc_to_usd">Вы потратите</string>
+    <string name="btc_action_button_purchase">Купить</string>
+
+    <string name="btc_transaction_header_sale">Продажа</string>
+    <string name="btc_transaction_cost_header_sale_btc_to_usd">Вы получите</string>
+    <string name="btc_transaction_cost_header_sale_usd_to_btc">Вы продадите</string>
+    <string name="btc_action_button_sale">Продать</string>
+
+
+
     <string name="title_activity_menu">MenuActivity</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
