@@ -34,8 +34,8 @@ public abstract class BTCPurchaseSaleFragment extends Fragment {
 
     private static String operationMode;
 
-    private double transactionAmount = 0.0;
-    private double transactionCost = 0.0;
+    private double transactionAmount;
+    private double transactionCost;
     private boolean isTransactionBlockHidden = true;
     private String currencyMode;
     private static final int MAX_LENGTH = 12;
@@ -45,20 +45,11 @@ public abstract class BTCPurchaseSaleFragment extends Fragment {
     private Button actionButton;
     private TextView transactionCostTextView;
 
-    private boolean RotationEvent = false;
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (savedInstanceState != null && savedInstanceState.getString(Tags.DEVICE_ROTATION_EVENT) != null) {
-            currencyMode = savedInstanceState.getString(Tags.CURRENCY_MODE);
-            transactionAmount = Double.valueOf(savedInstanceState.getString(Tags.TRANSACTION_AMOUNT));
-        } else {
-            currencyMode = Tags.MODE_USD_TO_BTC;
-        }
-
+        currencyMode = Tags.MODE_USD_TO_BTC;
         operationMode = (String)getArguments().get(Tags.FRAGMENT_MODE);
     }
 
@@ -83,24 +74,6 @@ public abstract class BTCPurchaseSaleFragment extends Fragment {
 
         transactionCostTextView = (TextView)view.findViewById(R.id.btc_transaction_cost);
         actionButton = (Button)view.findViewById(R.id.btc_action_button);
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-
-        if (RotationEvent) {
-            outState.putString(Tags.DEVICE_ROTATION_EVENT, Tags.DEVICE_ROTATION_EVENT);
-            outState.putString(Tags.TRANSACTION_AMOUNT, String.valueOf(transactionAmount));
-            outState.putString(Tags.CURRENCY_MODE, currencyMode);
-        }
-
-    }
-
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        RotationEvent = true;
     }
 
     private void initLabels(){

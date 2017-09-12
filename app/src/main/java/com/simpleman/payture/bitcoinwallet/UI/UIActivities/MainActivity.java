@@ -22,21 +22,19 @@ public class MainActivity extends AppCompatActivity {
     private boolean rotated = false;
 
     @Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        super.onSaveInstanceState(outState, outPersistentState);
-        if (outState != null) {
-            rotated = outState.getBoolean(Tags.DEVICE_ROTATION_EVENT);
-        }
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (!rotated) {
+        if (savedInstanceState == null) {
             priceInfoFragment = new BTCPriceInfoFragment();
             mainFragment = BTCSaleFragment.newInstance();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.btc_price_frame, priceInfoFragment).commit();
+            fragmentManager.beginTransaction().replace(R.id.main_frame, mainFragment).commit();
+        } else {
+            mainFragment = getSupportFragmentManager().getFragment(savedInstanceState, "MAIN_FRAGMENT");
+            priceInfoFragment = new BTCPriceInfoFragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.btc_price_frame, priceInfoFragment).commit();
             fragmentManager.beginTransaction().replace(R.id.main_frame, mainFragment).commit();
@@ -51,9 +49,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-
-        getSupportFragmentManager().putFragment(outState, "");
-        outState.putBoolean(Tags.DEVICE_ROTATION_EVENT, rotated);
+        super.onSaveInstanceState(outState);
+        getSupportFragmentManager().putFragment(outState, "MAIN_FRAGMENT", mainFragment);
     }
 
     @Override
