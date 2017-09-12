@@ -20,7 +20,7 @@ public class GetBTCPriceHistoryTask extends AsyncTask<Fragment,Void,Void> {
 
     private Map<String, String> reqParams;
     private BTCPriceHistoryItem[] btcPriceHistoryItems;
-    private Fragment context;
+    private Fragment fragment;
     private BTCChart btcChart;
 
     private void fillRequestParams(){
@@ -31,7 +31,7 @@ public class GetBTCPriceHistoryTask extends AsyncTask<Fragment,Void,Void> {
     @Override
     protected Void doInBackground(Fragment... fragments) {
         fillRequestParams();
-        this.context = fragments[0];
+        this.fragment = fragments[0];
 
         StatisticRequest request = new StatisticRequest(reqParams, new Response.Listener<JSONObject>() {
             @Override
@@ -51,12 +51,13 @@ public class GetBTCPriceHistoryTask extends AsyncTask<Fragment,Void,Void> {
             }
         });
 
-        AppRequestQueue.getInstance(this.context.getContext().getApplicationContext()).addToRequestQueue(request);
+        AppRequestQueue.getInstance(this.fragment.getContext()).addToRequestQueue(request);
         return null;
     }
 
     private void drawChart() {
-        btcChart = new BTCChart(btcPriceHistoryItems, context);
+        if (fragment.getView() != null)
+            btcChart = new BTCChart(btcPriceHistoryItems, fragment);
     }
 
     private BTCPriceHistoryItem[] parseBTCPriceHistoryJSON(JSONObject BTCPriceHistoryJSON){

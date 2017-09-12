@@ -3,6 +3,10 @@ package com.simpleman.payture.bitcoinwallet.Utils;
 
 public final class Tags {
 
+    public static final String MAIN_STATE = "MAIN_STATE";
+    public static final String MAIN_FRAGMENT = "MAIN_FRAGMENT";
+    public static final String INFO_FRAGMENT = "INFO_FRAGMENT";
+
     public static final String DEVICE_ROTATION_EVENT = "DEVICE_ROTATED";
     public static final String MODE_USD_TO_BTC = "USD_TO_BTC";
     public static final String MODE_BTC_TO_USD = "BTC_TO_USD";

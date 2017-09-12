@@ -28,8 +28,6 @@ import java.util.Map;
 
 public class BTCPriceChartFragment extends Fragment {
 
-    private boolean isDeviceRotated = false;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_btc_price_chart, container, false);
@@ -39,35 +37,8 @@ public class BTCPriceChartFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (savedInstanceState != null) {
-            try {
-                isDeviceRotated = savedInstanceState.getBoolean(Tags.DEVICE_ROTATION_EVENT);
-            } catch (Exception ex) {
-                Log.e("BTCPriceChartFragment", ex.toString());
-                isDeviceRotated = false;
-            }
-        }
+        GetBTCPriceHistoryTask task = new GetBTCPriceHistoryTask();
+        task.execute(this);
 
-        if (!isDeviceRotated){
-            GetBTCPriceHistoryTask task = new GetBTCPriceHistoryTask();
-            task.execute(this);
-        } else {
-            LineChart chart = ((LineChart)getView().findViewById(R.id.btc_price_chart));
-            chart.invalidate();
-            chart.setNoDataText("");
-        }
     }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        isDeviceRotated = true;
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putBoolean(Tags.DEVICE_ROTATION_EVENT, true);
-    }
-
 }

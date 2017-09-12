@@ -12,17 +12,21 @@
         android:supportsRtl="true"
         android:configChanges="orientation"
         android:theme="@style/AppTheme">
-        <activity android:name=".UI.UIActivities.MainActivity">
+        <!--activity android:name=".UI.UIActivities.MainActivityOld">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-->
+        <activity
+            android:name=".UI.UIActivities.MainActivity"
+            android:label="@string/title_activity_menu"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".UI.UIActivities.MenuActivity"
-            android:label="@string/title_activity_menu"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
