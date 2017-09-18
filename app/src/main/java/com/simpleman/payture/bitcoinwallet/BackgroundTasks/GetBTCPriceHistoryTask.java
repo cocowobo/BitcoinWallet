@@ -1,4 +1,4 @@
-package com.simpleman.payture.bitcoinwallet.StatisticEngine.BackgroundTasks;
+package com.simpleman.payture.bitcoinwallet.BackgroundTasks;
 
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
@@ -18,22 +18,15 @@ import java.util.Map;
 
 public class GetBTCPriceHistoryTask extends AsyncTask<Fragment,Void,Void> {
 
-    private Map<String, String> reqParams;
     private BTCPriceHistoryItem[] btcPriceHistoryItems;
     private Fragment fragment;
     private BTCChart btcChart;
 
-    private void fillRequestParams(){
-        reqParams = new HashMap<>();
-        reqParams.put("format", "json");
-    }
-
     @Override
     protected Void doInBackground(Fragment... fragments) {
-        fillRequestParams();
         this.fragment = fragments[0];
 
-        StatisticRequest request = new StatisticRequest(reqParams, new Response.Listener<JSONObject>() {
+        StatisticRequest request = new StatisticRequest(new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 Log.i("GetBTCPriceHistoryTask", response.toString());

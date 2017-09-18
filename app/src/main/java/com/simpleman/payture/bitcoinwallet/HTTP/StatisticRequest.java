@@ -7,47 +7,28 @@ import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.JsonObjectRequest;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 import java.util.Map;
 
-public class StatisticRequest extends Request<JSONObject> {
+public class StatisticRequest extends JsonObjectRequest {
 
-    private Map<String, String> params;
-    private Response.Listener<JSONObject> listener;
     private final static String URL = "https://api.blockchain.info/charts/market-price";
+    private final static int METHOD = Method.GET;
 
-    public StatisticRequest(Map<String,String> params,
-                            Response.Listener<JSONObject> responseListener,
+    public StatisticRequest(Response.Listener<JSONObject> responseListener,
                             Response.ErrorListener errorListener) {
-        super(Method.GET, URL, errorListener);
-        this.listener = responseListener;
-        this.params = params;
+        super(METHOD, URL, null, responseListener, errorListener);
     }
 
     @Override
     protected Map<String, String> getParams() throws AuthFailureError {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("format", "json");
         return params;
     }
-
-    @Override
-    protected void deliverResponse(JSONObject response) {
-        listener.onResponse(response);
-    }
-
-    @Override
-    protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
-        try {
-            String jsonString = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
-            return Response.success(new JSONObject(jsonString), HttpHeaderParser.parseCacheHeaders(response));
-        } catch (UnsupportedEncodingException e) {
-            Log.e("StatisticRequest", e.toString());
-            return Response.error(new ParseError(e));
-        } catch (JSONException je) {
-            Log.e("StatisticRequest", je.toString());
-            return Response.error(new ParseError(je));
-        }
-    }
-
 }

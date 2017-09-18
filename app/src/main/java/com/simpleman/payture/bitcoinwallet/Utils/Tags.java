@@ -18,6 +18,7 @@ public final class Tags {
     public static final String TRANSACTION_AMOUNT = "TRANSACTION_AMOUNT";
     public static final String CURRENCY_MODE = "CURRENCY_MODE";
 
+    public static final String LOGIN_STATE = "LOGIN_STATE";
 
 }
 

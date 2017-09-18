@@ -1,4 +1,4 @@
-package com.simpleman.payture.bitcoinwallet.StatisticEngine.BackgroundTasks;
+package com.simpleman.payture.bitcoinwallet.BackgroundTasks;
 
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;

@@ -14,7 +14,6 @@
     <string name="btc_action_button_sale">Продать</string>
 
 
-
     <string name="title_activity_menu">Bitcoin</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -23,6 +22,16 @@
     <string name="navigation_dashboard">Главная</string>
     <string name="navigation_btc_purchase">Купить биткоин</string>
     <string name="navigation_btc_sale">Продать биткоин</string>
+    <string name="title_activity_login">Sign in</string>
+
+    <!-- Strings related to login -->
+    <string name="login_btc_label">BITCOIN</string>
+
+
+    <string name="login_hint_state_get_code">your phone number...</string>
+    <string name="login_hint_state_get_token">code from SMS...</string>
+    <string name="login_action_button_state_get_code">Get code</string>
+    <string name="login_action_button_state_get_token">Send code</string>
 
 
 </resources>

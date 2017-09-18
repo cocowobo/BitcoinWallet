@@ -72,7 +72,7 @@ public class BTCChart {
         formatXAxis();
         formatYAxis();
 
-        dataSet.setColor(Color.BLUE);
+        dataSet.setColor(R.color.colorPrimary);
         dataSet.setHighlightEnabled(false);
         dataSet.setDrawCircles(false);
         dataSet.setDrawFilled(true);

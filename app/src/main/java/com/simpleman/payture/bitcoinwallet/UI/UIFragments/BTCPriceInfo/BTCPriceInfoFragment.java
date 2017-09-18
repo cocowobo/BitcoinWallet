@@ -1,7 +1,6 @@
 package com.simpleman.payture.bitcoinwallet.UI.UIFragments.BTCPriceInfo;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +10,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 
 import com.simpleman.payture.bitcoinwallet.R;
-import com.simpleman.payture.bitcoinwallet.StatisticEngine.BackgroundTasks.GetBTCCurrentPriceTask;
+import com.simpleman.payture.bitcoinwallet.BackgroundTasks.GetBTCCurrentPriceTask;
 
 
 public class BTCPriceInfoFragment extends Fragment {

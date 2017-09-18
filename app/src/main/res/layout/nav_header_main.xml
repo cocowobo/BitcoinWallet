@@ -19,7 +19,7 @@
         android:layout_gravity="center_horizontal"
         android:scaleType="fitCenter"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        app:srcCompat="@drawable/qr_label" />
+        app:srcCompat="@drawable/qr_lable" />
 
     <TextView
         android:id="@+id/user_name"
