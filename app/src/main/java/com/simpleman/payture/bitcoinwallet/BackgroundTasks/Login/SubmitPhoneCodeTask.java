@@ -48,6 +48,7 @@ public class SubmitPhoneCodeTask extends AsyncTask<String, Void, Void> {
         request.setRetryPolicy(new DefaultRetryPolicy(10000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
+        Log.i("SubmitCodeTask", "Starting request... " + request.toString());
         AppRequestQueue.getInstance(context).addToRequestQueue(request);
 
         return null;

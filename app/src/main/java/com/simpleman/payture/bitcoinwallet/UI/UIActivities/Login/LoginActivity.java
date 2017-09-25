@@ -1,5 +1,6 @@
 package com.simpleman.payture.bitcoinwallet.UI.UIActivities.Login;
 
+import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import com.simpleman.payture.bitcoinwallet.BackgroundTasks.Login.IAsyncAuthCallb
 import com.simpleman.payture.bitcoinwallet.BackgroundTasks.Login.SubmitPhoneCodeTask;
 import com.simpleman.payture.bitcoinwallet.R;
 import com.simpleman.payture.bitcoinwallet.ReCaptcha.ReCAPTCHAVerifier;
+import com.simpleman.payture.bitcoinwallet.UI.UIActivities.Main.MainActivity;
 import com.simpleman.payture.bitcoinwallet.Utils.Tags;
 
 public class LoginActivity extends AppCompatActivity implements IAsyncAuthCallback {
@@ -154,7 +156,8 @@ public class LoginActivity extends AppCompatActivity implements IAsyncAuthCallba
        if (result.isSuccess()) {
            Log.i("onSubmitCodeResult" , "starting new activity...");
            // start new activity
+           Intent intent = new Intent(this, MainActivity.class);
+           this.startActivity(intent);
        }
     }
-
 }

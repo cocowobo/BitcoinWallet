@@ -15,7 +15,7 @@ import org.json.JSONObject;
 public class GetPhoneCodeTask extends AsyncTask<String, Void, Void> {
 
     private Context context;
-    IAsyncAuthCallback asyncGetCodeResult;
+    private IAsyncAuthCallback asyncGetCodeResult;
 
     public GetPhoneCodeTask(Context context, IAsyncAuthCallback result){
         this.context = context;
@@ -47,6 +47,7 @@ public class GetPhoneCodeTask extends AsyncTask<String, Void, Void> {
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
+        Log.i("GetPhoneCodeTask", "Starting request... " + request.toString());
         AppRequestQueue.getInstance(context).addToRequestQueue(request);
         return null;
     }

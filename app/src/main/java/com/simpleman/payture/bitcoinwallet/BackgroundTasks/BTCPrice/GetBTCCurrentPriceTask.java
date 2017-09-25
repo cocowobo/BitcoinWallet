@@ -1,4 +1,4 @@
-package com.simpleman.payture.bitcoinwallet.BackgroundTasks;
+package com.simpleman.payture.bitcoinwallet.BackgroundTasks.BTCPrice;
 
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
@@ -9,10 +9,10 @@ import com.simpleman.payture.bitcoinwallet.UI.UIFragments.BTCPriceInfo.BTCPriceI
 
 public class GetBTCCurrentPriceTask extends AsyncTask<Void, Void, Void> {
 
-    private Fragment caller_fragment;
+    private IBTCPriceCallback callback;
 
-    public GetBTCCurrentPriceTask(Fragment fragment){
-        caller_fragment = fragment;
+    public GetBTCCurrentPriceTask(IBTCPriceCallback callback){
+        this.callback = callback;
     }
 
     @Override
@@ -26,8 +26,7 @@ public class GetBTCCurrentPriceTask extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected void onPostExecute(Void aVoid) {
-        ((BTCPriceInfoFragment)caller_fragment).stopAnimation();
-        ((BTCPriceInfoFragment)caller_fragment).fillFields();
+        callback.onGetBTCPriceInfo();
     }
 
 }

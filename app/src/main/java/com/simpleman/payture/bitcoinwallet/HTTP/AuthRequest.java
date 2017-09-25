@@ -9,12 +9,15 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 public class AuthRequest extends JsonObjectRequest {
 
     private ArrayMap<String, String> params;
     private static final int METHOD = Request.Method.POST;
-    private static final String BASE_URL = "http://10.0.2.2:53039";
+    private static final String BASE_URL = "http://192.168.17.36:53039";
 
     public AuthRequest(String route,
                        ArrayMap<String, String> params,
@@ -25,10 +28,10 @@ public class AuthRequest extends JsonObjectRequest {
     }
 
     @Override
-    public ArrayMap<String, String> getHeaders() throws AuthFailureError {
-        ArrayMap<String, String> headers = new ArrayMap<>();
+    public Map<String, String> getHeaders() throws AuthFailureError {
+        Map<String, String>  headers = new HashMap<>();
         if (params != null && params.containsKey("token")) {
-            headers.put("x-device", "android");
+            headers.put("x-device", "Android");
             headers.put("x-captcha", params.get("token"));
         }
         return headers;

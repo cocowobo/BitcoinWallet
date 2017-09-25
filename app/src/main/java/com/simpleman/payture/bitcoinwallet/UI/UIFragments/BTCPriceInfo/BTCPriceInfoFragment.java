@@ -9,13 +9,15 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 
+import com.simpleman.payture.bitcoinwallet.BackgroundTasks.BTCPrice.IBTCPriceCallback;
 import com.simpleman.payture.bitcoinwallet.R;
-import com.simpleman.payture.bitcoinwallet.BackgroundTasks.GetBTCCurrentPriceTask;
+import com.simpleman.payture.bitcoinwallet.BackgroundTasks.BTCPrice.GetBTCCurrentPriceTask;
 
 
-public class BTCPriceInfoFragment extends Fragment {
+public class BTCPriceInfoFragment extends Fragment implements IBTCPriceCallback {
 
     private ImageButton updateBTCPriceInfo;
+    private IBTCPriceCallback callback;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -26,6 +28,7 @@ public class BTCPriceInfoFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         updateBTCPriceInfo = (ImageButton) view.findViewById(R.id.update_btc_price_info_button);
+        callback = this;
 
         asyncUpdateBTCPriceInfo();
 
@@ -39,7 +42,7 @@ public class BTCPriceInfoFragment extends Fragment {
 
     private void asyncUpdateBTCPriceInfo(){
         startAnimation();
-        new GetBTCCurrentPriceTask(this).execute();
+        new GetBTCCurrentPriceTask(callback).execute();
     }
 
     private void startAnimation(){
@@ -52,6 +55,17 @@ public class BTCPriceInfoFragment extends Fragment {
         updateBTCPriceInfo.clearAnimation();
     }
 
+    @Override
+    public void onGetBTCPriceInfo() {
+        stopAnimation();
+        fillFields();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        callback = null;
+    }
 
     public void fillFields(){
 

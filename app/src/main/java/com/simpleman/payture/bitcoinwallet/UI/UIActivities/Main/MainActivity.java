@@ -1,8 +1,7 @@
-package com.simpleman.payture.bitcoinwallet.UI.UIActivities;
+package com.simpleman.payture.bitcoinwallet.UI.UIActivities.Main;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,15 +10,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
-
 import com.simpleman.payture.bitcoinwallet.R;
 import com.simpleman.payture.bitcoinwallet.UI.UIFragments.BTCBuySell.BTCPurchaseFragment;
 import com.simpleman.payture.bitcoinwallet.UI.UIFragments.BTCBuySell.BTCSaleFragment;
 import com.simpleman.payture.bitcoinwallet.UI.UIFragments.BTCPriceChart.BTCPriceChartFragment;
 import com.simpleman.payture.bitcoinwallet.UI.UIFragments.BTCPriceInfo.BTCPriceInfoFragment;
-import com.simpleman.payture.bitcoinwallet.Utils.MainState;
 import com.simpleman.payture.bitcoinwallet.Utils.Tags;
 
 public class MainActivity extends AppCompatActivity
@@ -29,7 +25,7 @@ public class MainActivity extends AppCompatActivity
     private Fragment mainFragment;
     private Fragment infoFragment;
 
-    private String state = MainState.DASHBOARD;
+    private MainState state = MainState.DASHBOARD;
     private boolean deviceRotated = false;
 
     @Override
@@ -52,7 +48,7 @@ public class MainActivity extends AppCompatActivity
             fragmentManager = getSupportFragmentManager();
             mainFragment = fragmentManager.getFragment(savedInstanceState, Tags.MAIN_FRAGMENT);
             infoFragment = fragmentManager.getFragment(savedInstanceState, Tags.INFO_FRAGMENT);
-            state = savedInstanceState.getString(Tags.MAIN_STATE);
+            state = MainState.getByCode(savedInstanceState.getInt(Tags.MAIN_STATE));
         } else {
             fragmentManager = getSupportFragmentManager();
             mainFragment = new BTCPriceChartFragment();
@@ -77,7 +73,7 @@ public class MainActivity extends AppCompatActivity
             outState.putString(Tags.DEVICE_ROTATION_EVENT, Tags.DEVICE_ROTATION_EVENT);
             fragmentManager.putFragment(outState, Tags.MAIN_FRAGMENT, mainFragment);
             fragmentManager.putFragment(outState, Tags.INFO_FRAGMENT, infoFragment);
-            outState.putString(Tags.MAIN_STATE, state);
+            outState.putInt(Tags.MAIN_STATE, state.ordinal());
         }
     }
 

@@ -1,5 +1,6 @@
-package com.simpleman.payture.bitcoinwallet.BackgroundTasks;
+package com.simpleman.payture.bitcoinwallet.BackgroundTasks.BTCPrice;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -16,22 +17,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class GetBTCPriceHistoryTask extends AsyncTask<Fragment,Void,Void> {
+public class GetBTCPriceHistoryTask extends AsyncTask<Void,Void,Void> {
 
     private BTCPriceHistoryItem[] btcPriceHistoryItems;
-    private Fragment fragment;
-    private BTCChart btcChart;
+    private IBTCPriceHistoryCallback callback;
+
+    public GetBTCPriceHistoryTask(IBTCPriceHistoryCallback callback) {
+        this.callback = callback;
+    }
 
     @Override
-    protected Void doInBackground(Fragment... fragments) {
-        this.fragment = fragments[0];
+    protected Void doInBackground(Void... params) {
 
         StatisticRequest request = new StatisticRequest(new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 Log.i("GetBTCPriceHistoryTask", response.toString());
                 btcPriceHistoryItems = parseBTCPriceHistoryJSON(response);
-                drawChart();
+                callback.onGetBTCPriceHistory(btcPriceHistoryItems);
                 return;
             }
         }, new Response.ErrorListener() {
@@ -39,18 +42,13 @@ public class GetBTCPriceHistoryTask extends AsyncTask<Fragment,Void,Void> {
             public void onErrorResponse(VolleyError error) {
                 Log.e("GetBTCPriceHistoryTask", error.toString());
                 btcPriceHistoryItems = null;
-                drawChart();
+                callback.onGetBTCPriceHistory(btcPriceHistoryItems);
                 return;
             }
         });
 
-        AppRequestQueue.getInstance(this.fragment.getContext()).addToRequestQueue(request);
+        AppRequestQueue.getInstance(((Fragment)callback).getContext()).addToRequestQueue(request);
         return null;
-    }
-
-    private void drawChart() {
-        if (fragment.getView() != null)
-            btcChart = new BTCChart(btcPriceHistoryItems, fragment);
     }
 
     private BTCPriceHistoryItem[] parseBTCPriceHistoryJSON(JSONObject BTCPriceHistoryJSON){

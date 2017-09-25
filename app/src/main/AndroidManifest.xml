@@ -19,7 +19,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".UI.UIActivities.MainActivity"
+            android:name=".UI.UIActivities.Main.MainActivity"
             android:label="@string/title_activity_menu"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>

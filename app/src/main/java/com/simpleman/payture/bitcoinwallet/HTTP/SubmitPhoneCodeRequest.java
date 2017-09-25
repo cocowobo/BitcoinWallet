@@ -25,7 +25,6 @@ public class SubmitPhoneCodeRequest extends AuthRequest {
         ArrayMap<String, String> params = new ArrayMap<>();
         params.put("phone", param[0]);
         params.put("code", param[1]);
-        params.put("token", param[2]);
         return params;
     }
 }
