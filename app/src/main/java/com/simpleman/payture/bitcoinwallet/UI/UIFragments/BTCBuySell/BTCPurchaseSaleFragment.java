@@ -22,6 +22,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.simpleman.payture.bitcoinwallet.Application.Application;
 import com.simpleman.payture.bitcoinwallet.CurrencyExchanger.Currency;
 import com.simpleman.payture.bitcoinwallet.CurrencyExchanger.Exchanger;
 import com.simpleman.payture.bitcoinwallet.R;
@@ -51,6 +52,9 @@ public abstract class BTCPurchaseSaleFragment extends Fragment {
 
         currencyMode = Tags.MODE_USD_TO_BTC;
         operationMode = (String)getArguments().get(Tags.FRAGMENT_MODE);
+
+        Application.checkBitcoinWalletAddress( getFragmentManager() );
+
     }
 
     @Override

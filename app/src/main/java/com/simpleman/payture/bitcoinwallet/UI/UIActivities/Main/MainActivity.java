@@ -11,6 +11,10 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+import com.simpleman.payture.bitcoinwallet.Application.Application;
+import com.simpleman.payture.bitcoinwallet.Application.ApplicationState;
 import com.simpleman.payture.bitcoinwallet.R;
 import com.simpleman.payture.bitcoinwallet.UI.UIFragments.BTCBuySell.BTCPurchaseFragment;
 import com.simpleman.payture.bitcoinwallet.UI.UIFragments.BTCBuySell.BTCSaleFragment;
@@ -18,14 +22,13 @@ import com.simpleman.payture.bitcoinwallet.UI.UIFragments.BTCPriceChart.BTCPrice
 import com.simpleman.payture.bitcoinwallet.UI.UIFragments.BTCPriceInfo.BTCPriceInfoFragment;
 import com.simpleman.payture.bitcoinwallet.Utils.Tags;
 
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private FragmentManager fragmentManager;
     private Fragment mainFragment;
     private Fragment infoFragment;
-
-    private MainState state = MainState.DASHBOARD;
     private boolean deviceRotated = false;
 
     @Override
@@ -48,16 +51,20 @@ public class MainActivity extends AppCompatActivity
             fragmentManager = getSupportFragmentManager();
             mainFragment = fragmentManager.getFragment(savedInstanceState, Tags.MAIN_FRAGMENT);
             infoFragment = fragmentManager.getFragment(savedInstanceState, Tags.INFO_FRAGMENT);
-            state = MainState.getByCode(savedInstanceState.getInt(Tags.MAIN_STATE));
+            Application.setState(ApplicationState.getByCode(savedInstanceState.getInt(Tags.MAIN_STATE)));
         } else {
             fragmentManager = getSupportFragmentManager();
             mainFragment = new BTCPriceChartFragment();
             infoFragment = new BTCPriceInfoFragment();
-            state = MainState.DASHBOARD;
+            Application.setState(ApplicationState.DASHBOARD);
         }
 
         fragmentManager.beginTransaction().replace(R.id.main_frame, mainFragment).commit();
         fragmentManager.beginTransaction().replace(R.id.btc_price_frame, infoFragment).commit();
+
+        Application.getInstance(this);
+
+        initNavView();
     }
 
     @Override
@@ -73,7 +80,7 @@ public class MainActivity extends AppCompatActivity
             outState.putString(Tags.DEVICE_ROTATION_EVENT, Tags.DEVICE_ROTATION_EVENT);
             fragmentManager.putFragment(outState, Tags.MAIN_FRAGMENT, mainFragment);
             fragmentManager.putFragment(outState, Tags.INFO_FRAGMENT, infoFragment);
-            outState.putInt(Tags.MAIN_STATE, state.ordinal());
+            outState.putInt(Tags.MAIN_STATE, Application.getState().ordinal());
         }
     }
 
@@ -119,36 +126,44 @@ public class MainActivity extends AppCompatActivity
         switch (id) {
             case R.id.nav_dashboard:
                 {
-                    if (!state.equals(MainState.DASHBOARD)) {
+                    if (!Application.getState().equals(ApplicationState.DASHBOARD)) {
                         mainFragment = new BTCPriceChartFragment();
                         fragmentManager.beginTransaction().replace(R.id.main_frame, mainFragment).commit();
                     }
-                    state = MainState.DASHBOARD;
+                    Application.setState(ApplicationState.DASHBOARD);
                     break;
                 }
             case R.id.nav_btc_purchase:
                 {
-                    if (!state.equals(MainState.PURCHASE)) {
+                    if (!Application.getState().equals(ApplicationState.PURCHASE)) {
                         mainFragment = BTCPurchaseFragment.newInstance();
                         fragmentManager.beginTransaction().replace(R.id.main_frame, mainFragment).commit();
                     }
-                    state = MainState.PURCHASE;
+                    Application.setState(ApplicationState.PURCHASE);
                     break;
                 }
             case R.id.nav_btc_sale:
             {
-                if (!state.equals(MainState.SALE)) {
+                if (!Application.getState().equals(ApplicationState.SALE)) {
                     mainFragment = BTCSaleFragment.newInstance();
                     fragmentManager.beginTransaction().replace(R.id.main_frame, mainFragment).commit();
                 }
-                state = MainState.SALE;
+                Application.setState(ApplicationState.SALE);
                 break;
             }
         }
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
+    private void initNavView() {
+        NavigationView navigationView = (NavigationView)findViewById(R.id.nav_view);
+        View header = navigationView.getHeaderView(0);
+        TextView address = (TextView)header.findViewById(R.id.user_address);
+        address.setText(Application.getBitcoinWalletAddress());
+    }
+
 }

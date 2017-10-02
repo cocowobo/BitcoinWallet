@@ -19,6 +19,9 @@ public final class Tags {
     public static final String CURRENCY_MODE = "CURRENCY_MODE";
 
     public static final String LOGIN_STATE = "LOGIN_STATE";
+    public static final String WALLET_ADDRESS_DIALOG = "WALLET_ADDRESS_DIALOG";
+    public static final String WALLET_ADDRESS_FILE = "WALLET_ADDRESS_FILE";
+    public static final String BITCOIN_WALLET_ADDRESS = "BITCOIN_WALLET_ADDRESS";
 
 }
 

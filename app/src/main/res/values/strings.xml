@@ -33,5 +33,11 @@
     <string name="login_action_button_state_get_code">Get code</string>
     <string name="login_action_button_state_get_token">Send code</string>
 
+    <string name="wallet_address_dialog_title">Адрес биткойн кошелька</string>
+    <string name="wallet_address_dialog_anno">Пожалуйста, укажите адрес вашего bitcoin кошелька (данная информация сохранится только на вашем устройстве)</string>
+
+
+    <string name="dialog_button_positive">OK</string>
+    <string name="dialog_button_later">Позже</string>
 
 </resources>
