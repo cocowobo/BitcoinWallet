@@ -10,12 +10,16 @@ import com.simpleman.payture.bitcoinwallet.Utils.Tags;
 public class Application {
 
     private static Application applicationInstance;
-    private static Context context;
+    private Context context;
 
     private Application(Context context) {
         this.context = context;
         state = ApplicationState.DASHBOARD;
         getBitcoinWalletAddress();
+    }
+
+    public static synchronized Application getInstance() {
+        return getInstance(null);
     }
 
     public static synchronized Application getInstance(Context context) {
@@ -24,42 +28,57 @@ public class Application {
         return applicationInstance;
     }
 
-    private static String BitcoinWalletAddress;
-    private static ApplicationState state;
+    /*
+    * Main App Params
+    * UserPhone - user phone number
+    * BitcoinWalletAddress - user bitcoin wallet address
+    * State - application state : DASHBOARD/PURCHASE/SALE
+    */
+    private String userPhone;
+    private String BitcoinWalletAddress;
+    private ApplicationState state;
 
-
-    public static ApplicationState getState() {
+    public ApplicationState getState() {
         return state;
     }
 
-    public static void setState(ApplicationState state) {
-        Application.state = state;
+    public void setState(ApplicationState state) {
+        this.state = state;
     }
 
-
-    public static String getBitcoinWalletAddress() {
+    public String getBitcoinWalletAddress() {
 
         if (BitcoinWalletAddress != null)
             return BitcoinWalletAddress;
 
         SharedPreferences sharedPreferences = context.getSharedPreferences(Tags.WALLET_ADDRESS_FILE, Context.MODE_PRIVATE);
-        BitcoinWalletAddress = sharedPreferences.getString(Tags.BITCOIN_WALLET_ADDRESS, null);
+        BitcoinWalletAddress = sharedPreferences.getString(userPhone, null);
         return BitcoinWalletAddress;
     }
 
-    public static void setBitcoinWalletAddress(String bitcoinWalletAddress) {
+    public void setBitcoinWalletAddress(String bitcoinWalletAddress) {
         BitcoinWalletAddress = bitcoinWalletAddress;
         SharedPreferences sharedPreferences = context.getSharedPreferences(Tags.WALLET_ADDRESS_FILE, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(Tags.BITCOIN_WALLET_ADDRESS, bitcoinWalletAddress);
+        editor.putString(userPhone, bitcoinWalletAddress);
         editor.commit();
     }
 
-    public static void checkBitcoinWalletAddress(FragmentManager fragmentManager) {
+    public void checkBitcoinWalletAddress(FragmentManager fragmentManager) {
 
-        if (Application.getBitcoinWalletAddress() == null) {
+        if (this.getBitcoinWalletAddress() == null || this.getBitcoinWalletAddress().isEmpty()) {
             WalletAddressDialogFragment dialog = new WalletAddressDialogFragment();
-            dialog.show(fragmentManager, Tags.WALLET_ADDRESS_DIALOG);
+            dialog.showDialog(fragmentManager);
         }
     }
+
+    public void setUserPhone(String userPhone) {
+        if (this.userPhone == null)
+            this.userPhone = userPhone;
+    }
+
+    public String getUserPhone() {
+        return userPhone;
+    }
+
 }

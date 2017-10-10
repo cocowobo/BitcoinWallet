@@ -1,5 +1,6 @@
 package com.simpleman.payture.bitcoinwallet.UI.UIFragments.BTCPriceChart;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.simpleman.payture.bitcoinwallet.Application.Application;
+import com.simpleman.payture.bitcoinwallet.BackgroundTasks.BTCPrice.GetBTCPriceHistoryTaskThread;
 import com.simpleman.payture.bitcoinwallet.BackgroundTasks.BTCPrice.IBTCPriceHistoryCallback;
 import com.simpleman.payture.bitcoinwallet.R;
 import com.simpleman.payture.bitcoinwallet.BackgroundTasks.BTCPrice.GetBTCPriceHistoryTask;
@@ -16,6 +18,7 @@ import com.simpleman.payture.bitcoinwallet.BackgroundTasks.BTCPrice.GetBTCPriceH
 public class BTCPriceChartFragment extends Fragment implements IBTCPriceHistoryCallback {
 
     private IBTCPriceHistoryCallback callback;
+    GetBTCPriceHistoryTaskThread task;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -25,8 +28,7 @@ public class BTCPriceChartFragment extends Fragment implements IBTCPriceHistoryC
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Application.checkBitcoinWalletAddress( getFragmentManager() );
-
+        Application.getInstance().checkBitcoinWalletAddress( getFragmentManager() );
     }
 
     @Override
@@ -34,7 +36,7 @@ public class BTCPriceChartFragment extends Fragment implements IBTCPriceHistoryC
         super.onViewCreated(view, savedInstanceState);
         callback = this;
 
-        GetBTCPriceHistoryTask task = new GetBTCPriceHistoryTask(callback);
+        task = new GetBTCPriceHistoryTaskThread(callback);
         task.execute();
     }
 
@@ -48,5 +50,6 @@ public class BTCPriceChartFragment extends Fragment implements IBTCPriceHistoryC
     public void onDestroy() {
         super.onDestroy();
         callback = null;
+        task.stop();
     }
 }

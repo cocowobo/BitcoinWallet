@@ -13,17 +13,26 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class AuthRequest extends JsonObjectRequest {
+public class PilxRequest extends JsonObjectRequest {
 
     private ArrayMap<String, String> params;
     private static final int METHOD = Request.Method.POST;
-    private static final String BASE_URL = "http://192.168.17.36:53039";
 
-    public AuthRequest(String route,
+    public PilxRequest(String route,
                        ArrayMap<String, String> params,
                        Response.Listener<JSONObject> responseListener,
                        Response.ErrorListener errorListener) {
         super(METHOD, getURL(route), getCustomParams(params), responseListener, errorListener);
+        this.params = params;
+    }
+
+
+    public PilxRequest(int method,
+                       String route,
+                       ArrayMap<String, String> params,
+                       Response.Listener<JSONObject> responseListener,
+                       Response.ErrorListener errorListener) {
+        super(method, getURL(route), getCustomParams(params), responseListener, errorListener);
         this.params = params;
     }
 
@@ -38,7 +47,7 @@ public class AuthRequest extends JsonObjectRequest {
     }
 
     private static String getURL(String route){
-        return String.format("%s/%s", BASE_URL, route);
+        return String.format("%s/%s", AppRequestQueue.getBaseUrl(), route);
     }
 
     private static JSONObject getCustomParams(ArrayMap<String, String> params){

@@ -1,7 +1,6 @@
 package com.simpleman.payture.bitcoinwallet.BackgroundTasks.BTCPrice;
 
-import android.content.Context;
-import android.os.AsyncTask;
+
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import com.android.volley.Response;
@@ -9,27 +8,28 @@ import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.simpleman.payture.bitcoinwallet.HTTP.AppRequestQueue;
 import com.simpleman.payture.bitcoinwallet.HTTP.StatisticRequest;
-import com.simpleman.payture.bitcoinwallet.UI.UIFragments.BTCPriceChart.BTCChart;
 import com.simpleman.payture.bitcoinwallet.UI.UIFragments.BTCPriceChart.BTCPriceHistoryItem;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import java.util.HashMap;
-import java.util.Map;
 
-//DEPRECATED class
-
-public class GetBTCPriceHistoryTask extends AsyncTask<Void,Void,Void> {
+public class GetBTCPriceHistoryTaskThread {
 
     private BTCPriceHistoryItem[] btcPriceHistoryItems;
     private IBTCPriceHistoryCallback callback;
+    private Thread thread;
 
-    public GetBTCPriceHistoryTask(IBTCPriceHistoryCallback callback) {
+    public GetBTCPriceHistoryTaskThread(IBTCPriceHistoryCallback callback){
         this.callback = callback;
+        this.thread = new Thread(new Runnable(){
+            @Override
+            public void run() {
+                doInBackground();
+            }
+        });
+
     }
 
-    @Override
-    protected Void doInBackground(Void... params) {
-
+    public void doInBackground(){
         StatisticRequest request = new StatisticRequest(new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -49,7 +49,15 @@ public class GetBTCPriceHistoryTask extends AsyncTask<Void,Void,Void> {
         });
 
         AppRequestQueue.getInstance(((Fragment)callback).getContext()).addToRequestQueue(request);
-        return null;
+    }
+
+    public void execute(){
+        thread.run();
+    }
+
+    public void stop() {
+        if (thread != null)
+            thread.interrupt();
     }
 
     private BTCPriceHistoryItem[] parseBTCPriceHistoryJSON(JSONObject BTCPriceHistoryJSON){
@@ -66,4 +74,3 @@ public class GetBTCPriceHistoryTask extends AsyncTask<Void,Void,Void> {
     }
 
 }
-

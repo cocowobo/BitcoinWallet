@@ -4,9 +4,10 @@ import android.support.v4.util.ArrayMap;
 import com.android.volley.Response;
 import org.json.JSONObject;
 
-public class GetPhoneCodeRequest extends AuthRequest {
+public class GetPhoneCodeRequest extends PilxRequest {
 
     private static final String ROUTE = "api/auth/code";
+
 
     public GetPhoneCodeRequest(String phone, String token,
                                Response.Listener<JSONObject> responseListener,

@@ -52,9 +52,7 @@ public abstract class BTCPurchaseSaleFragment extends Fragment {
 
         currencyMode = Tags.MODE_USD_TO_BTC;
         operationMode = (String)getArguments().get(Tags.FRAGMENT_MODE);
-
-        Application.checkBitcoinWalletAddress( getFragmentManager() );
-
+        Application.getInstance().checkBitcoinWalletAddress( getFragmentManager() );
     }
 
     @Override
@@ -222,13 +220,13 @@ public abstract class BTCPurchaseSaleFragment extends Fragment {
             switch (currencyMode) {
                 case Tags.MODE_USD_TO_BTC :
                 {
-                    transactionCost = Exchanger.calculateBTCforUSD(transactionAmount);
+                    transactionCost = Exchanger.getInstance().calculateForward(transactionAmount, "USD");
                     decFormat = new DecimalFormat("#0.00000000");
                     break;
                 }
                 case Tags.MODE_BTC_TO_USD :
                 {
-                    transactionCost = Exchanger.calculateUSDforBTC(transactionAmount);
+                    transactionCost = Exchanger.getInstance().calculateReverse(transactionAmount, "BTC");
                     decFormat = new DecimalFormat("#0.00");
                     break;
                 }

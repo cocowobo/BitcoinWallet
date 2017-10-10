@@ -1,7 +1,10 @@
 <resources>
     <string name="app_name">Bitcoin</string>
+    <string name="currency_BTC_USD_label">BTC USD</string>
+    <string name="currency_BTC_EUR_label">BTC EUR</string>
     <string name="currency_USD_label">USD</string>
-    <string name="currency_BTC_label">BTC</string>
+    <string name="currency_BTC_label">USD</string>
+
 
     <string name="btc_transaction_header_purchase">Покупка</string>
     <string name="btc_transaction_cost_header_purchase_usd_to_btc">Вы получите</string>

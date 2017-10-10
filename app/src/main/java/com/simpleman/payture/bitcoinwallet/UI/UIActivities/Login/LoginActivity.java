@@ -155,9 +155,11 @@ public class LoginActivity extends AppCompatActivity implements IAsyncAuthCallba
     public void onSubmitCodeResult(AuthResponse result) {
        if (result.isSuccess()) {
            Log.i("onSubmitCodeResult" , "starting new activity...");
+           Bundle params = new Bundle();
+           params.putString(Tags.PHONE, phone);
            // start new activity
            Intent intent = new Intent(this, MainActivity.class);
-           this.startActivity(intent);
+           this.startActivity(intent, params);
        }
     }
 }

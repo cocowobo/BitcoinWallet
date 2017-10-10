@@ -11,6 +11,13 @@ public  class AppRequestQueue {
     private static RequestQueue mRequestQueue;
     private static Context context;
 
+    private final static String BASE_URL = "http://10.0.2.2:53039";
+
+    public static String getBaseUrl() {
+        return BASE_URL;
+    }
+
+
     private AppRequestQueue(Context ctx){
         context = ctx;
         mRequestQueue = getRequestQueue();

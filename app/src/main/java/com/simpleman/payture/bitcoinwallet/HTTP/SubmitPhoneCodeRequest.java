@@ -11,7 +11,7 @@ import org.json.JSONObject;
 import java.util.Map;
 
 
-public class SubmitPhoneCodeRequest extends AuthRequest {
+public class SubmitPhoneCodeRequest extends PilxRequest {
 
     private final static String ROUTE = "api/auth/token";
 
