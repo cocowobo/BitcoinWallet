@@ -2,9 +2,9 @@ package com.simpleman.payture.bitcoinwallet.CurrencyExchanger;
 
 
 public enum Currency {
-    USD(1), BTC(1);
+    USD, EUR, BTC;
 
-    Currency(double price){
+    /*Currency(double price){
         setPrice(1);
     }
 
@@ -16,5 +16,5 @@ public enum Currency {
 
     public void setPrice(double price) {
         this.price = price;
-    }
+    }*/
 }

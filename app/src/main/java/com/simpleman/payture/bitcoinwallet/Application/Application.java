@@ -18,9 +18,7 @@ public class Application {
         getBitcoinWalletAddress();
     }
 
-    public static synchronized Application getInstance() {
-        return getInstance(null);
-    }
+    public static synchronized Application getInstance() {return getInstance(null);}
 
     public static synchronized Application getInstance(Context context) {
         if (applicationInstance == null)

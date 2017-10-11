@@ -14,26 +14,30 @@ public class Exchanger {
         return exchanger;
     }
 
-    private BTCCurrentPrice[] rates = null;
+    private BTCCurrentPrice[] rates = { new BTCCurrentPrice("BTC", "USD" , 4123.45, 123)};
 
     public synchronized void updateRates(BTCCurrentPrice[] rates) {
         this.rates = rates;
     }
 
-    public Double calculateForward(double btcAmount, String currencyTo) {
-        for (BTCCurrentPrice rate : rates) {
-            if (rate.getTo().equals(currencyTo))
-                return btcAmount * rate.getRate();
+    public double calculateForward(double btcAmount, String currencyTo) {
+        if (rates != null) {
+            for (BTCCurrentPrice rate : rates) {
+                if (rate.getTo().equals(currencyTo))
+                    return btcAmount * rate.getRate();
+            }
         }
-        return null;
+        return 0;
     }
 
-    public Double calculateReverse(double cur_amount, String currencyFrom) {
-        for (BTCCurrentPrice rate : rates) {
-            if (rate.getTo().equals(currencyFrom))
-                return cur_amount / rate.getRate();
+    public double calculateReverse(double cur_amount, String currencyFrom) {
+        if (rates != null) {
+            for (BTCCurrentPrice rate : rates) {
+                if (rate.getTo().equals(currencyFrom))
+                    return cur_amount / rate.getRate();
+            }
         }
-        return null;
+        return 0;
     }
 
     /*

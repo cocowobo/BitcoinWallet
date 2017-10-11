@@ -21,6 +21,7 @@ import com.simpleman.payture.bitcoinwallet.Application.Application;
 import com.simpleman.payture.bitcoinwallet.Application.ApplicationState;
 import com.simpleman.payture.bitcoinwallet.R;
 import com.simpleman.payture.bitcoinwallet.UI.UIFragments.BTCBuySell.BTCPurchaseFragment;
+import com.simpleman.payture.bitcoinwallet.UI.UIFragments.BTCBuySell.BTCPurchaseSaleFragmentNew;
 import com.simpleman.payture.bitcoinwallet.UI.UIFragments.BTCBuySell.BTCSaleFragment;
 import com.simpleman.payture.bitcoinwallet.UI.UIFragments.BTCPriceChart.BTCPriceChartFragment;
 import com.simpleman.payture.bitcoinwallet.UI.UIFragments.BTCPriceInfo.BTCPriceInfoFragment;
@@ -146,7 +147,8 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_btc_purchase:
                 {
                     if (!Application.getInstance().getState().equals(ApplicationState.PURCHASE)) {
-                        mainFragment = BTCPurchaseFragment.newInstance();
+                        mainFragment = new BTCPurchaseSaleFragmentNew();
+                        //mainFragment = BTCPurchaseFragment.newInstance();
                         fragmentManager.beginTransaction().replace(R.id.main_frame, mainFragment).commit();
                     }
                     Application.getInstance().setState(ApplicationState.PURCHASE);
