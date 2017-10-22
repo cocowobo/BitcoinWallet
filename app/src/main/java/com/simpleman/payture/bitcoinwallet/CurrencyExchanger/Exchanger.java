@@ -14,7 +14,8 @@ public class Exchanger {
         return exchanger;
     }
 
-    private BTCCurrentPrice[] rates = { new BTCCurrentPrice("BTC", "USD" , 4123.45, 123)};
+    private BTCCurrentPrice[] rates = { new BTCCurrentPrice("BTC", "USD" , 4123.45, 123),
+                                        new BTCCurrentPrice("BTC", "EUR" , 3000.01, 123), };
 
     public synchronized void updateRates(BTCCurrentPrice[] rates) {
         this.rates = rates;
@@ -39,17 +40,4 @@ public class Exchanger {
         }
         return 0;
     }
-
-    /*
-    public static double calculateUSDforBTC(double btc_amount){
-        return btc_amount * Currency.USD.getPrice();
-    }
-
-    public static double calculateBTCforUSD(double usd_amount){
-        return usd_amount / Currency.USD.getPrice();
-    }
-
-    public static void updatePrices(){
-        Currency.USD.setPrice(4567.89);
-    }*/
 }

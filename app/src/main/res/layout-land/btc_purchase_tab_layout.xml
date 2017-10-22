@@ -8,7 +8,7 @@
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/btc_purchase_layout_top"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="0dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -16,7 +16,7 @@
             android:id="@+id/btc_purchase_transaction_cost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="7"
+            android:ems="12"
             android:textAlignment="center"
             android:textSize="32dp"
             android:hint="0.00"
@@ -39,13 +39,15 @@
             app:layout_constraintBottom_toBottomOf="@+id/btc_purchase_transaction_cost"
             android:layout_marginRight="8dp"
             app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginLeft="8dp" />
+            android:layout_marginLeft="8dp"
+            app:layout_constraintLeft_toRightOf="@+id/btc_purchase_transaction_cost"
+            app:layout_constraintHorizontal_bias="0.33" />
 
     </android.support.constraint.ConstraintLayout>
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/btc_purchase_layout_bottom"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="0dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/btc_purchase_layout_top">
@@ -54,7 +56,7 @@
             android:id="@+id/btc_purchase_transaction_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="7"
+            android:ems="12"
             android:textAlignment="center"
             android:textSize="32dp"
             android:hint="0.00"
@@ -78,7 +80,8 @@
             app:layout_constraintLeft_toRightOf="@+id/btc_purchase_transaction_amount"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            app:layout_constraintRight_toRightOf="parent" />
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintHorizontal_bias="0.27" />
 
     </android.support.constraint.ConstraintLayout>
 

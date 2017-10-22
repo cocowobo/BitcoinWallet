@@ -10,19 +10,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.simpleman.payture.bitcoinwallet.Application.Application;
 import com.simpleman.payture.bitcoinwallet.Application.ApplicationState;
 import com.simpleman.payture.bitcoinwallet.R;
-import com.simpleman.payture.bitcoinwallet.UI.UIFragments.BTCBuySell.BTCPurchaseFragment;
-import com.simpleman.payture.bitcoinwallet.UI.UIFragments.BTCBuySell.BTCPurchaseSaleFragmentNew;
-import com.simpleman.payture.bitcoinwallet.UI.UIFragments.BTCBuySell.BTCSaleFragment;
+import com.simpleman.payture.bitcoinwallet.UI.UIFragments.BTCBuySell.BTCPurchaseSaleFragment;
 import com.simpleman.payture.bitcoinwallet.UI.UIFragments.BTCPriceChart.BTCPriceChartFragment;
 import com.simpleman.payture.bitcoinwallet.UI.UIFragments.BTCPriceInfo.BTCPriceInfoFragment;
 import com.simpleman.payture.bitcoinwallet.Utils.Tags;
@@ -75,7 +70,6 @@ public class MainActivity extends AppCompatActivity
         fragmentManager.beginTransaction().replace(R.id.btc_price_frame, infoFragment).commit();
 
         initNavView();
-        initOnTouchListener();
     }
 
     @Override
@@ -147,7 +141,7 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_btc_purchase:
                 {
                     if (!Application.getInstance().getState().equals(ApplicationState.PURCHASE)) {
-                        mainFragment = new BTCPurchaseSaleFragmentNew();
+                        mainFragment = new BTCPurchaseSaleFragment();
                         //mainFragment = BTCPurchaseFragment.newInstance();
                         fragmentManager.beginTransaction().replace(R.id.main_frame, mainFragment).commit();
                     }
@@ -157,7 +151,7 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_btc_sale:
             {
                 if (!Application.getInstance().getState().equals(ApplicationState.SALE)) {
-                    mainFragment = BTCSaleFragment.newInstance();
+                    mainFragment = new BTCPurchaseSaleFragment();
                     fragmentManager.beginTransaction().replace(R.id.main_frame, mainFragment).commit();
                 }
                 Application.getInstance().setState(ApplicationState.SALE);
@@ -181,18 +175,4 @@ public class MainActivity extends AppCompatActivity
         user.setText(Application.getInstance().getUserPhone());
     }
 
-
-
-    private void initOnTouchListener() {
-        View view = findViewById(R.id.content_main);
-        view.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_MOVE) {
-                    Log.i("onTouch", event.toString());
-                }
-                return false;
-            }
-        });
-    }
 }

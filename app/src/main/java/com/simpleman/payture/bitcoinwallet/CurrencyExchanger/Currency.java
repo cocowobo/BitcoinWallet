@@ -4,17 +4,11 @@ package com.simpleman.payture.bitcoinwallet.CurrencyExchanger;
 public enum Currency {
     USD, EUR, BTC;
 
-    /*Currency(double price){
-        setPrice(1);
+    public static Currency getByName(String name) {
+        for ( Currency mode : Currency.values() )
+            if ( mode.name() == name ) {
+                return mode;
+            }
+        return USD;
     }
-
-    private double price;
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }*/
 }

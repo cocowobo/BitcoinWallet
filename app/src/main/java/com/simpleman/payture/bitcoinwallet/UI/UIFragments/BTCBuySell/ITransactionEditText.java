@@ -3,11 +3,10 @@ package com.simpleman.payture.bitcoinwallet.UI.UIFragments.BTCBuySell;
 
 public interface ITransactionEditText {
 
-    void makeControlsValid();
-    void makeControlsInvalid();
-    boolean isTransactionCostValid();
+    void makeAdditionalControlsValid();
+    void makeAdditionalControlsInvalid();
 
-    void resetTargetValue();
+    void clearTargetValue();
     void renderTargetValue();
-    void setTargetValue(String text);
+    void saveBasicValue(String text);
 }
