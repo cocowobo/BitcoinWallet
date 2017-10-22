@@ -81,23 +81,17 @@ public class BTCPurchaseSaleFragmentNew extends Fragment {
     }
 
     private void initEditTextFields() {
-        final EditText transactionAmountEditText = (EditText)getView().findViewById(R.id.btc_transaction_amount);
-        final EditText transactionCostEditText = (EditText)getView().findViewById(R.id.btc_transaction_cost);
 
-        transactionAmountEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                if (transactionAmountEditText.isFocused()) {
-                    resetTransactionCost();
-                    makeControlsValid();
-                }
-            }
+
+        EditText transactionAmountEditText = (EditText)getView().findViewById(R.id.btc_sale_transaction_amount);
+        EditText transactionCostEditText = (EditText)getView().findViewById(R.id.btc_sale_transaction_cost);
+
+        EditTextWatcher textWatcher = new EditTextWatcher(transactionAmountEditText, transactionCostEditText) {
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String textTransactionAmount = s.toString();
+            public void setTargetValue(String text) {
                 try {
-                    transactionAmount = Double.valueOf(textTransactionAmount);
+                    transactionAmount = Double.valueOf(text);
                 } catch (Exception ex) {
                     Log.e("BTCPurchaseSaleFragment", "initEditTextFields " + ex.toString());
                     transactionAmount = 0.00;
@@ -105,42 +99,37 @@ public class BTCPurchaseSaleFragmentNew extends Fragment {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-                if (transactionAmountEditText.isFocused()) {
-                    renderTransactionCost();
-                    if (!isTransactionCostValid()) makeControlsInvalid();
-                }
-            }
-        });
-
-        transactionCostEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                if (transactionCostEditText.isFocused()) {
-                    resetTransactionAmount();
-                    makeControlsValid();
-                }
+            public void makeControlsValid() {
+                makeControlsValid();
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String textTransactionAmount = s.toString();
-                try {
-                    transactionCost = Double.valueOf(textTransactionAmount);
-                } catch (Exception ex) {
-                    Log.e("BTCPurchaseSaleFragment", "initEditTextFields " + ex.toString());
-                    transactionCost = 0.00;
-                }
+            public void makeControlsInvalid() {
+                makeControlsInvalid();
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-                if (transactionCostEditText.isFocused()) {
-                    renderTransactionAmount();
-                    if (!isTransactionCostValid()) makeControlsInvalid();
-                }
+            public void renderTargetValue() {
+                renderTransactionAmount();
             }
-        });
+
+            @Override
+            public void resetTargetValue() {
+                resetTransactionAmount();
+            }
+
+            @Override
+            public boolean isTransactionCostValid() {
+                return isTransactionCostValid();
+            }
+        };
+
+
+
+
+
+
+
     }
 
     private void initCurrencySpinner() {
@@ -161,11 +150,14 @@ public class BTCPurchaseSaleFragmentNew extends Fragment {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     currency = Currency.valueOf(parent.getItemAtPosition(position).toString());
+
+                    renderTransactionCost();
                 }
 
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {
                     currency = Currency.USD;
+                    renderTransactionCost();
                 }
             });
         }
@@ -183,13 +175,15 @@ public class BTCPurchaseSaleFragmentNew extends Fragment {
         transactionCost = calculateTransactionCost();
         EditText transactionCostEditText = (EditText)getView().findViewById(R.id.btc_transaction_cost);
 
-        DecimalFormat decFormat = new DecimalFormat("#.00");
+        DecimalFormat decFormat = new DecimalFormat("#0.00");
         switch (operationState) {
             case Tags.FRAGMENT_PURCHASE_MODE: {
-                decFormat = new DecimalFormat("#.00000000");
+                decFormat = new DecimalFormat("#0.00000000");
+                break;
             }
             case Tags.FRAGMENT_SALE_MODE: {
-                decFormat = new DecimalFormat("#.00");
+                decFormat = new DecimalFormat("#0.00");
+                break;
             }
         }
 
@@ -221,14 +215,13 @@ public class BTCPurchaseSaleFragmentNew extends Fragment {
         transactionAmount = calculateTransactionAmount();
         EditText transactionAmountEditText = (EditText)getView().findViewById(R.id.btc_transaction_amount);
 
-
-        DecimalFormat decFormat = new DecimalFormat("#.00");
+        DecimalFormat decFormat = new DecimalFormat("#0.00");
         switch (operationState) {
             case Tags.FRAGMENT_PURCHASE_MODE: {
-                decFormat = new DecimalFormat("#.00");
+                decFormat = new DecimalFormat("#0.00");
             }
             case Tags.FRAGMENT_SALE_MODE: {
-                decFormat = new DecimalFormat("#.00000000");
+                decFormat = new DecimalFormat("#0.00000000");
             }
         }
         transactionAmountEditText.setText(decFormat.format(transactionAmount));
@@ -255,7 +248,8 @@ public class BTCPurchaseSaleFragmentNew extends Fragment {
         EditText transactionCostEditText = (EditText)getView().findViewById(R.id.btc_transaction_cost);
         transactionAmountEditText.setTextColor(Color.RED);
         transactionCostEditText.setTextColor(Color.RED);
-        Button actionButton = (Button)getView().findViewById(R.id.action_button);
+        Button actionButton = (Button)getView().findViewById(R.id.btc_action_button);
+        actionButton.setBackgroundColor(getResources().getColor(R.color.mainBackground));
         actionButton.setEnabled(false);
     }
 
@@ -265,6 +259,7 @@ public class BTCPurchaseSaleFragmentNew extends Fragment {
         transactionAmountEditText.setTextColor(Color.BLACK);
         transactionCostEditText.setTextColor(Color.BLACK);
         Button actionButton = (Button)getView().findViewById(R.id.btc_action_button);
+        actionButton.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         actionButton.setEnabled(true);
     }
 
@@ -275,9 +270,12 @@ public class BTCPurchaseSaleFragmentNew extends Fragment {
         String inputAmount = transactionAmountEditText.getText().toString();
         String inputCost  = transactionCostEditText.getText().toString();
 
-
-        if (Double.valueOf(inputAmount) == 0 && Double.valueOf(inputCost) != 0)
+        if (inputAmount.isEmpty() || inputCost.isEmpty())
             return false;
+
+        if (Double.valueOf(inputAmount) * Double.valueOf(inputCost) == 0)
+            return false;
+
         return true;
     }
 
