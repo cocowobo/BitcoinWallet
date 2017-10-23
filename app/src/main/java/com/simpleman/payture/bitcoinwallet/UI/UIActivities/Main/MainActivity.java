@@ -1,6 +1,7 @@
 package com.simpleman.payture.bitcoinwallet.UI.UIActivities.Main;
 
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -12,15 +13,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.simpleman.payture.bitcoinwallet.Application.Application;
 import com.simpleman.payture.bitcoinwallet.Application.ApplicationState;
+import com.simpleman.payture.bitcoinwallet.Application.User;
+import com.simpleman.payture.bitcoinwallet.BitcoinWallet.OnWalletAppKitSetupListener;
 import com.simpleman.payture.bitcoinwallet.R;
 import com.simpleman.payture.bitcoinwallet.UI.UIFragments.BTCBuySell.BTCPurchaseSaleFragment;
 import com.simpleman.payture.bitcoinwallet.UI.UIFragments.BTCPriceChart.BTCPriceChartFragment;
 import com.simpleman.payture.bitcoinwallet.UI.UIFragments.BTCPriceInfo.BTCPriceInfoFragment;
+import com.simpleman.payture.bitcoinwallet.Utils.QRCodeFormatter;
 import com.simpleman.payture.bitcoinwallet.Utils.Tags;
+import org.bitcoinj.core.Address;
+import org.bitcoinj.uri.BitcoinURI;
 
 
 public class MainActivity extends AppCompatActivity
@@ -48,27 +54,39 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         if (savedInstanceState != null ) {
+            // если устройство было повернуто
             if (savedInstanceState.getString(Tags.DEVICE_ROTATION_EVENT) != null) {
                 fragmentManager = getSupportFragmentManager();
                 mainFragment = fragmentManager.getFragment(savedInstanceState, Tags.MAIN_FRAGMENT);
                 infoFragment = fragmentManager.getFragment(savedInstanceState, Tags.INFO_FRAGMENT);
-                Application.getInstance(this).setState(ApplicationState.getByCode(savedInstanceState.getInt(Tags.MAIN_STATE)));
+                Application.getInstance(this, null).setState(ApplicationState.getByCode(savedInstanceState.getInt(Tags.MAIN_STATE)));
             }
 
+            // если был переход со страницы логина
             if (savedInstanceState.getString(Tags.PHONE) != null) {
-                Application.getInstance(this).setUserPhone(savedInstanceState.getString(Tags.PHONE));
+                String passedPhone = savedInstanceState.getString(Tags.PHONE);
+                User user = new User(passedPhone);
+                Application.getInstance(this, user);
             }
 
-            } else {
+            //иначе
+        } else {
             fragmentManager = getSupportFragmentManager();
             mainFragment = new BTCPriceChartFragment();
             infoFragment = new BTCPriceInfoFragment();
-            Application.getInstance(this).setState(ApplicationState.DASHBOARD);
+
+            /* DEBUG */
+            User user = new User("79680500275");
+            Application.getInstance(this, user).setState(ApplicationState.DASHBOARD);
+
+            //Application.getInstance(this, null).setState(ApplicationState.DASHBOARD);
         }
 
+        // отображаем фрагменты
         fragmentManager.beginTransaction().replace(R.id.main_frame, mainFragment).commit();
         fragmentManager.beginTransaction().replace(R.id.btc_price_frame, infoFragment).commit();
 
+        // заполняем меню
         initNavView();
     }
 
@@ -85,7 +103,7 @@ public class MainActivity extends AppCompatActivity
             outState.putString(Tags.DEVICE_ROTATION_EVENT, Tags.DEVICE_ROTATION_EVENT);
             fragmentManager.putFragment(outState, Tags.MAIN_FRAGMENT, mainFragment);
             fragmentManager.putFragment(outState, Tags.INFO_FRAGMENT, infoFragment);
-            outState.putInt(Tags.MAIN_STATE, Application.getInstance().getState().ordinal());
+            outState.putInt(Tags.MAIN_STATE, Application.getState().ordinal());
         }
     }
 
@@ -131,30 +149,30 @@ public class MainActivity extends AppCompatActivity
         switch (id) {
             case R.id.nav_dashboard:
                 {
-                    if (!Application.getInstance().getState().equals(ApplicationState.DASHBOARD)) {
+                    if (!Application.getState().equals(ApplicationState.DASHBOARD)) {
                         mainFragment = new BTCPriceChartFragment();
                         fragmentManager.beginTransaction().replace(R.id.main_frame, mainFragment).commit();
                     }
-                    Application.getInstance().setState(ApplicationState.DASHBOARD);
+                    Application.setState(ApplicationState.DASHBOARD);
                     break;
                 }
             case R.id.nav_btc_purchase:
                 {
-                    if (!Application.getInstance().getState().equals(ApplicationState.PURCHASE)) {
+                    if (!Application.getState().equals(ApplicationState.PURCHASE)) {
                         mainFragment = new BTCPurchaseSaleFragment();
                         //mainFragment = BTCPurchaseFragment.newInstance();
                         fragmentManager.beginTransaction().replace(R.id.main_frame, mainFragment).commit();
                     }
-                    Application.getInstance().setState(ApplicationState.PURCHASE);
+                    Application.setState(ApplicationState.PURCHASE);
                     break;
                 }
             case R.id.nav_btc_sale:
             {
-                if (!Application.getInstance().getState().equals(ApplicationState.SALE)) {
+                if (!Application.getState().equals(ApplicationState.SALE)) {
                     mainFragment = new BTCPurchaseSaleFragment();
                     fragmentManager.beginTransaction().replace(R.id.main_frame, mainFragment).commit();
                 }
-                Application.getInstance().setState(ApplicationState.SALE);
+                Application.setState(ApplicationState.SALE);
                 break;
             }
         }
@@ -168,11 +186,35 @@ public class MainActivity extends AppCompatActivity
     private void initNavView() {
         NavigationView navigationView = (NavigationView)findViewById(R.id.nav_view);
         View header = navigationView.getHeaderView(0);
-        TextView address = (TextView)header.findViewById(R.id.user_address);
-        TextView user = (TextView)header.findViewById(R.id.user_name);
 
-        address.setText(Application.getInstance().getBitcoinWalletAddress());
-        user.setText(Application.getInstance().getUserPhone());
+        // выводим номер пользователя
+        TextView user = (TextView)header.findViewById(R.id.user_name);
+        user.setText(Application.getUser().getPhone());
+
+        // выводим адрес кошелька пользователя
+        final TextView address = (TextView)header.findViewById(R.id.user_address);
+        final ImageView qrcodeImageView = (ImageView)header.findViewById(R.id.qr_image_view);
+
+        // если кошелек уже загружен, то отображаем сразу
+        if (Application.getWallet().isLoaded()) {
+            String adr = Application.getWallet().getAddress().toString();
+            Bitmap qrcode = Application.getWallet().getQRCodeBitmap();
+            address.setText(adr);
+            qrcodeImageView.setImageBitmap(qrcode);
+        }
+
+        // если нет, то при загрузке
+        Application.getWalletController().addOnWalletAppKitSetupListener(new OnWalletAppKitSetupListener() {
+            @Override
+            public void onWalletAppKitSetup() {
+                String adr = Application.getWallet().getAddress().toString();
+                Bitmap qrcode = Application.getWallet().getQRCodeBitmap();
+                address.setText(adr);
+                qrcodeImageView.setImageBitmap(qrcode);
+            }
+        });
+        
+        // TODO: 10/23/2017 добавить вывод баланса
     }
 
 }

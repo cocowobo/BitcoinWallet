@@ -28,7 +28,7 @@ public class BTCPriceChartFragment extends Fragment implements IBTCPriceHistoryC
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Application.getInstance().checkBitcoinWalletAddress( getFragmentManager() );
+        //Application.getInstance().checkBitcoinWalletAddress( getFragmentManager() );
     }
 
     @Override

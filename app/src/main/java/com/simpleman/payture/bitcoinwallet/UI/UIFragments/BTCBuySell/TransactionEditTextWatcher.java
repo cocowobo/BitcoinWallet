@@ -68,8 +68,8 @@ public abstract class TransactionEditTextWatcher implements TextWatcher, ITransa
     }
 
     public boolean isTransactionCostValid() {
-        String inputBasic = this.getBasicField().getText().toString();
-        String inputTarget  = this.getTargetField().getText().toString();
+        String inputBasic = this.getBasicField().getText().toString().replace(',', '.');
+        String inputTarget  = this.getTargetField().getText().toString().replace(',', '.');;
 
         if (inputBasic.isEmpty() || inputTarget.isEmpty())
             return false;

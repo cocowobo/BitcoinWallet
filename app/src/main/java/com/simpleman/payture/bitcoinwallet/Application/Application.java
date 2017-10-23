@@ -1,82 +1,77 @@
 package com.simpleman.payture.bitcoinwallet.Application;
 
-
 import android.support.v4.app.FragmentManager;
 import android.content.Context;
-import android.content.SharedPreferences;
-import com.simpleman.payture.bitcoinwallet.UI.UIDialogs.WalletAddressDialogFragment;
-import com.simpleman.payture.bitcoinwallet.Utils.Tags;
+import android.util.Log;
+
+import com.simpleman.payture.bitcoinwallet.BitcoinWallet.BitcoinWallet;
+import com.simpleman.payture.bitcoinwallet.BitcoinWallet.BitcoinWalletController;
+
+import java.io.IOException;
 
 public class Application {
 
     private static Application applicationInstance;
     private Context context;
 
-    private Application(Context context) {
+    private Application(Context context, User usr) {
+
         this.context = context;
+        user = usr;
         state = ApplicationState.DASHBOARD;
-        getBitcoinWalletAddress();
+        walletController = new BitcoinWalletController(context);
+        wallet = walletController.getBitcoinWallet();
+
+        try {
+            walletController.setupWalletAppKit(null, user.getWalletFileName());
+        } catch ( IOException ex ) {
+            Log.e("Application", "setupWalletAppKit - " + ex.toString());
+        }
+
+        this.walletController.start();
     }
 
-    public static synchronized Application getInstance() {return getInstance(null);}
-
-    public static synchronized Application getInstance(Context context) {
-        if (applicationInstance == null)
-            applicationInstance = new Application(context);
+    public static Application getInstance(Context context, User user) {
+        if (applicationInstance == null) {
+            applicationInstance = new Application(context, user);
+        }
         return applicationInstance;
     }
 
-    /*
-    * Main App Params
-    * UserPhone - user phone number
-    * BitcoinWalletAddress - user bitcoin wallet address
-    * State - application state : DASHBOARD/PURCHASE/SALE
-    */
-    private String userPhone;
-    private String BitcoinWalletAddress;
-    private ApplicationState state;
+    private static ApplicationState state;
+    private static User user;
+    private static BitcoinWallet wallet;
 
-    public ApplicationState getState() {
+    private static BitcoinWalletController walletController;
+
+    public static ApplicationState getState() {
         return state;
     }
 
-    public void setState(ApplicationState state) {
-        this.state = state;
+    public static void setState(ApplicationState s) {
+        state = s;
     }
 
-    public String getBitcoinWalletAddress() {
-
-        if (BitcoinWalletAddress != null)
-            return BitcoinWalletAddress;
-
-        SharedPreferences sharedPreferences = context.getSharedPreferences(Tags.WALLET_ADDRESS_FILE, Context.MODE_PRIVATE);
-        BitcoinWalletAddress = sharedPreferences.getString(userPhone, null);
-        return BitcoinWalletAddress;
+    public static User getUser() {
+        return user;
     }
 
-    public void setBitcoinWalletAddress(String bitcoinWalletAddress) {
-        BitcoinWalletAddress = bitcoinWalletAddress;
-        SharedPreferences sharedPreferences = context.getSharedPreferences(Tags.WALLET_ADDRESS_FILE, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(userPhone, bitcoinWalletAddress);
-        editor.commit();
+    public static BitcoinWallet getWallet() {
+        return wallet;
     }
+
+    public static BitcoinWalletController getWalletController() {
+        return walletController;
+    }
+
+
 
     public void checkBitcoinWalletAddress(FragmentManager fragmentManager) {
-
+        return;/*
         if (this.getBitcoinWalletAddress() == null || this.getBitcoinWalletAddress().isEmpty()) {
             WalletAddressDialogFragment dialog = new WalletAddressDialogFragment();
             dialog.showDialog(fragmentManager);
-        }
-    }
-
-    public void setUserPhone(String userPhone) {
-        if (this.userPhone == null)
-            this.userPhone = userPhone;
-    }
-
-    public String getUserPhone() {
-        return userPhone;
+        }*/
     }
 
 }

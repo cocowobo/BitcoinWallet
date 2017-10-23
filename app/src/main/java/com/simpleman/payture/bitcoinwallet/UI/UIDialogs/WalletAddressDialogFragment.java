@@ -37,11 +37,11 @@ public class WalletAddressDialogFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         walletAddressEditText = (EditText) view.findViewById(R.id.dialog_wallet_address_editText);
-                        Application.getInstance().setBitcoinWalletAddress(walletAddressEditText.getText().toString());
+                        //Application.getInstance().setBitcoinWalletAddress(walletAddressEditText.getText().toString());
                     }
                 });
 
-        if (!Application.getInstance().getState().equals(ApplicationState.SALE))
+        if (!Application.getState().equals(ApplicationState.SALE))
             builder.setNegativeButton(R.string.dialog_button_later, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {

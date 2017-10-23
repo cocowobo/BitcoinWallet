@@ -177,7 +177,7 @@ public class BTCPurchaseSaleFragment extends Fragment {
             @Override
             public void saveBasicValue(String inputBasic) {
                 try {
-                    double value = Double.valueOf(inputBasic);
+                    double value = Double.valueOf(inputBasic.replace(',', '.'));
                     paytureTransaction.setTransactionAmount(value);
                 } catch ( Exception ex ) {
                     Log.e("BTCPurchaseSaleFragment", "TransactionEditTextWatcher - saveBasicValue - " + ex.toString() );
@@ -214,7 +214,7 @@ public class BTCPurchaseSaleFragment extends Fragment {
             @Override
             public void saveBasicValue(String inputBasic) {
                 try {
-                    double value = Double.valueOf(inputBasic);
+                    double value = Double.valueOf(inputBasic.replace(',', '.'));
                     paytureTransaction.setTransactionCost(value);
                 } catch ( Exception ex ) {
                     Log.e("BTCPurchaseSaleFragment", "TransactionEditTextWatcher - saveBasicValue - " + ex.toString() );

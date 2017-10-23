@@ -14,12 +14,11 @@
 
     <ImageView
         android:id="@+id/qr_image_view"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
         android:layout_gravity="center_horizontal"
         android:scaleType="fitCenter"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
-        app:srcCompat="@drawable/qr_lable" />
+        android:paddingTop="@dimen/nav_header_vertical_spacing" />
 
     <TextView
         android:id="@+id/user_name"
@@ -33,7 +32,7 @@
         android:id="@+id/user_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2" />
+        android:text="" />
 
     <TextView
         android:id="@+id/user_balance_header"
