@@ -14,10 +14,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.simpleman.payture.bitcoinwallet.Application.Application;
 import com.simpleman.payture.bitcoinwallet.Application.ApplicationState;
 import com.simpleman.payture.bitcoinwallet.Application.User;
+import com.simpleman.payture.bitcoinwallet.BitcoinWallet.OnProgressListener;
+import com.simpleman.payture.bitcoinwallet.BitcoinWallet.OnSyncCompletedListener;
 import com.simpleman.payture.bitcoinwallet.BitcoinWallet.OnWalletAppKitSetupListener;
 import com.simpleman.payture.bitcoinwallet.R;
 import com.simpleman.payture.bitcoinwallet.UI.UIFragments.BTCBuySell.BTCPurchaseSaleFragment;
@@ -88,6 +91,9 @@ public class MainActivity extends AppCompatActivity
 
         // заполняем меню
         initNavView();
+
+        // инициализируем прогресс бар
+        initProgressBar();
     }
 
     @Override
@@ -192,15 +198,18 @@ public class MainActivity extends AppCompatActivity
         user.setText(Application.getUser().getPhone());
 
         // выводим адрес кошелька пользователя
-        final TextView address = (TextView)header.findViewById(R.id.user_address);
+        final TextView addressTextView = (TextView)header.findViewById(R.id.user_address);
+        final TextView balanceTextView = (TextView)header.findViewById(R.id.user_balance_amount);
         final ImageView qrcodeImageView = (ImageView)header.findViewById(R.id.qr_image_view);
 
         // если кошелек уже загружен, то отображаем сразу
         if (Application.getWallet().isLoaded()) {
             String adr = Application.getWallet().getAddress().toString();
             Bitmap qrcode = Application.getWallet().getQRCodeBitmap();
-            address.setText(adr);
+            String balance = Application.getWallet().getBalance().toFriendlyString();
+            addressTextView.setText(adr);
             qrcodeImageView.setImageBitmap(qrcode);
+            balanceTextView.setText(balance);
         }
 
         // если нет, то при загрузке
@@ -209,12 +218,29 @@ public class MainActivity extends AppCompatActivity
             public void onWalletAppKitSetup() {
                 String adr = Application.getWallet().getAddress().toString();
                 Bitmap qrcode = Application.getWallet().getQRCodeBitmap();
-                address.setText(adr);
+                addressTextView.setText(adr);
                 qrcodeImageView.setImageBitmap(qrcode);
             }
         });
         
-        // TODO: 10/23/2017 добавить вывод баланса
+        Application.getWalletController().addOnSyncCompletedListener(new OnSyncCompletedListener() {
+            @Override
+            public void onSyncCompleted() {
+                String balance = Application.getWallet().getBalance().toFriendlyString();
+                balanceTextView.setText(balance);
+            }
+        });
+    }
+
+    private void initProgressBar(){
+        final ProgressBar loadingBar = (ProgressBar)findViewById(R.id.loading_progress_bar);
+        Application.getWalletController().addOnProgressListener(new OnProgressListener() {
+            @Override
+            public void onLoadingProgress(double progress) {
+                loadingBar.setProgress((int)progress, true);
+            }
+        });
+
     }
 
 }

@@ -2,6 +2,8 @@ package com.simpleman.payture.bitcoinwallet.Utils;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.util.Log;
+
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.common.BitMatrix;
@@ -18,6 +20,7 @@ public class QRCodeFormatter {
                     size, size, null
             );
         } catch ( Exception ex ){
+            Log.e("QRCodeFormatter", "encodeTextToBitmap - " + ex.toString());
             return null;
         }
 

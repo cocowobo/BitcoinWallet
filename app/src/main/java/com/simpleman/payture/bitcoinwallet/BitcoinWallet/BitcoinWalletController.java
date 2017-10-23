@@ -2,6 +2,7 @@ package com.simpleman.payture.bitcoinwallet.BitcoinWallet;
 
 
 import org.bitcoinj.core.*;
+import org.bitcoinj.core.listeners.DownloadProgressTracker;
 import org.bitcoinj.kits.WalletAppKit;
 import org.bitcoinj.params.RegTestParams;
 import org.bitcoinj.params.TestNet3Params;
@@ -10,6 +11,7 @@ import org.bitcoinj.wallet.DeterministicSeed;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
@@ -58,13 +60,20 @@ public class BitcoinWalletController {
             walletAppKit.connectToLocalHost();
         }
 
-        /*walletAppKit.setDownloadListener(new DownloadProgressTracker(){
+        walletAppKit.setDownloadListener(new DownloadProgressTracker(){
+            @Override
+            protected void progress(double pct, int blocksSoFar, Date date) {
+                super.progress(pct, blocksSoFar, date);
+                broadcastLoadProgress(pct);
+            }
+
             @Override
             protected void doneDownload() {
-                for (OnBlockchainDownloadedListener listener : listeners)
-                    listener.onBlockchainDownloadedListener();
+                super.doneDownload();
+                broadcastSyncCompleted();
             }
-        });*/
+        }).setBlockingStartup(false).setUserAgent("PILX", "1.0");;
+
 
         if (seed != null) {
             walletAppKit.restoreWalletFromSeed(seed);
@@ -85,24 +94,56 @@ public class BitcoinWalletController {
     }
 
     private void broadcastWalletAppKitSetup() {
-
         if ( context != null ) {
             ((MainActivity) context).runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    for (OnWalletAppKitSetupListener listener : listeners)
+                    for (OnWalletAppKitSetupListener listener : onWalletAppKitSetupListeners)
                         listener.onWalletAppKitSetup();
                 }
             });
         }
     }
+    private void broadcastSyncCompleted() {
+        if ( context != null ) {
+            ((MainActivity) context).runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    for (OnSyncCompletedListener listener : onSyncCompletedListeners)
+                        listener.onSyncCompleted();
+                }
+            });
+        }
+    }
 
-    //private List<OnBlockchainDownloadedListener> listeners = new ArrayList<OnBlockchainDownloadedListener>();
-    private List<OnWalletAppKitSetupListener> listeners = new ArrayList<OnWalletAppKitSetupListener>();
+    private void broadcastLoadProgress(final double progress) {
+        if ( context != null ) {
+            ((MainActivity) context).runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    for (OnProgressListener listener : onProgressListeners)
+                        listener.onLoadingProgress(progress);
+                }
+            });
+        }
+    }
+
+    private List<OnWalletAppKitSetupListener> onWalletAppKitSetupListeners = new ArrayList<OnWalletAppKitSetupListener>();
+    private List<OnProgressListener> onProgressListeners = new ArrayList<OnProgressListener>();
+    private List<OnSyncCompletedListener> onSyncCompletedListeners = new ArrayList<OnSyncCompletedListener>();
+
 
 
     public void addOnWalletAppKitSetupListener(OnWalletAppKitSetupListener listener) {
-        listeners.add(listener);
+        onWalletAppKitSetupListeners.add(listener);
+    }
+
+    public void addOnProgressListener(OnProgressListener listener) {
+        onProgressListeners.add(listener);
+    }
+
+    public void addOnSyncCompletedListener(OnSyncCompletedListener listener) {
+        onSyncCompletedListeners.add(listener);
     }
 
 

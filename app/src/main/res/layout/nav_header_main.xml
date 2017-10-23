@@ -43,7 +43,7 @@
         />
 
     <TextView
-        android:id="@+id/user_balace_amount"
+        android:id="@+id/user_balance_amount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="0.00 BTC"
