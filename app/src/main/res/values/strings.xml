@@ -36,6 +36,14 @@
     <string name="login_action_button_state_get_code">Get code</string>
     <string name="login_action_button_state_get_token">Send code</string>
 
+    <!-- Card info fragment -->
+    <string name="card_info_hint_pan">XXXX XXXX XXXX XXXX</string>
+    <string name="card_info_hint_cvv">cvv</string>
+    <string name="card_info_hint_month_year_exp">XX / XX</string>
+    <string name="card_info_hint_cardholder_name">cardholder name</string>
+    <string name="card_info_action_button">Ок</string>
+
+
     <string name="wallet_address_dialog_title">Адрес биткойн кошелька</string>
     <string name="wallet_address_dialog_anno">Пожалуйста, укажите адрес вашего bitcoin кошелька (данная информация сохранится только на вашем устройстве)</string>
 
