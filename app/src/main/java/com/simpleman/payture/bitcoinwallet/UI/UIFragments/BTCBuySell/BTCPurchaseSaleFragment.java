@@ -1,6 +1,7 @@
 package com.simpleman.payture.bitcoinwallet.UI.UIFragments.BTCBuySell;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,18 +17,18 @@ import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.Toast;
 
+import com.simpleman.payture.bitcoinwallet.Application.Application;
 import com.simpleman.payture.bitcoinwallet.Application.PaytureTransaction;
 import com.simpleman.payture.bitcoinwallet.Application.PaytureTransactionMode;
 import com.simpleman.payture.bitcoinwallet.CurrencyExchanger.Currency;
 import com.simpleman.payture.bitcoinwallet.R;
+import com.simpleman.payture.bitcoinwallet.UI.UIActivities.Main.MainActivity;
 import com.simpleman.payture.bitcoinwallet.Utils.Tags;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class BTCPurchaseSaleFragment extends Fragment {
-    // Основная информация о готовящейся транзакции
-    private PaytureTransaction paytureTransaction;
 
     // Основные элементы фрагмента
     // Схожие элементы на разных вкладках повторяются
@@ -61,14 +62,11 @@ public class BTCPurchaseSaleFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         if (savedInstanceState != null) {
-            paytureTransaction = new PaytureTransaction();
             String mode = savedInstanceState.getString(Tags.TAG_TRANSACTION_MODE);
             String currency = savedInstanceState.getString(Tags.TAG_CURRENCY);
             double cost = savedInstanceState.getDouble(Tags.TAG_TRANSACTION_COST);
             double amount = savedInstanceState.getDouble(Tags.TAG_TRANSACTION_AMOUNT);
-            paytureTransaction.restoreTransaction(mode, amount, cost, currency);
-        } else {
-            paytureTransaction = new PaytureTransaction(PaytureTransactionMode.PURCHASE, Currency.USD);
+            Application.getCurrentTransaction().restoreTransaction(mode, amount, cost, currency);
         }
         initViewComponents();
         return;
@@ -116,11 +114,15 @@ public class BTCPurchaseSaleFragment extends Fragment {
 
                 if ( tabId == Tab.PURCHASE.name() ) {
                     resetTabComponents(Tab.SALE);
-                    paytureTransaction = new PaytureTransaction(PaytureTransactionMode.PURCHASE, Currency.USD);
+                    Application.resetCurrentTransaction();
+                    Application.getCurrentTransaction().setTransactionMode(PaytureTransactionMode.PURCHASE);
+                    Application.getCurrentTransaction().setCurrency(Currency.USD);
                 }
                 else if ( tabId == Tab.SALE.name() ) {
                     resetTabComponents(Tab.PURCHASE);
-                    paytureTransaction = new PaytureTransaction(PaytureTransactionMode.SALE, Currency.USD);
+                    Application.resetCurrentTransaction();
+                    Application.getCurrentTransaction().setTransactionMode(PaytureTransactionMode.SALE);
+                    Application.getCurrentTransaction().setCurrency(Currency.USD);
                 }
             }
         });
@@ -163,14 +165,14 @@ public class BTCPurchaseSaleFragment extends Fragment {
         TransactionEditTextWatcher amountEditTextWatcher = new TransactionEditTextWatcher(transactionAmountEditText, transactionCostEditText, false) {
             @Override
             public void clearTargetValue() {
-                paytureTransaction.setTransactionCost(0.00);
+                Application.getCurrentTransaction().setTransactionCost(0.0);
                 this.renderTargetValue();
                 return;
             }
 
             @Override
             public void renderTargetValue() {
-                this.getTargetField().setText(getRenderFormat().format(paytureTransaction.getTransactionCost()));
+                this.getTargetField().setText(getRenderFormat().format(Application.getCurrentTransaction().getTransactionCost()).replace(',', '.'));
                 return;
             }
 
@@ -178,10 +180,10 @@ public class BTCPurchaseSaleFragment extends Fragment {
             public void saveBasicValue(String inputBasic) {
                 try {
                     double value = Double.valueOf(inputBasic.replace(',', '.'));
-                    paytureTransaction.setTransactionAmount(value);
+                    Application.getCurrentTransaction().setTransactionAmount(value);
                 } catch ( Exception ex ) {
                     Log.e("BTCPurchaseSaleFragment", "TransactionEditTextWatcher - saveBasicValue - " + ex.toString() );
-                    paytureTransaction.setTransactionAmount(0.0);
+                    Application.getCurrentTransaction().setTransactionAmount(0.0);
                 }
                 return;
             }
@@ -200,14 +202,14 @@ public class BTCPurchaseSaleFragment extends Fragment {
         TransactionEditTextWatcher costEditTextWatcher = new TransactionEditTextWatcher(transactionCostEditText, transactionAmountEditText, true) {
             @Override
             public void clearTargetValue() {
-                paytureTransaction.setTransactionAmount(0.00);
+                Application.getCurrentTransaction().setTransactionAmount(0.00);
                 this.renderTargetValue();
                 return;
             }
 
             @Override
             public void renderTargetValue() {
-                this.getTargetField().setText(getRenderFormat().format(paytureTransaction.getTransactionAmount()));
+                this.getTargetField().setText(getRenderFormat().format(Application.getCurrentTransaction().getTransactionAmount()).replace(',', '.'));
                 return;
             }
 
@@ -215,10 +217,10 @@ public class BTCPurchaseSaleFragment extends Fragment {
             public void saveBasicValue(String inputBasic) {
                 try {
                     double value = Double.valueOf(inputBasic.replace(',', '.'));
-                    paytureTransaction.setTransactionCost(value);
+                    Application.getCurrentTransaction().setTransactionCost(value);
                 } catch ( Exception ex ) {
                     Log.e("BTCPurchaseSaleFragment", "TransactionEditTextWatcher - saveBasicValue - " + ex.toString() );
-                    paytureTransaction.setTransactionCost(0.0);
+                    Application.getCurrentTransaction().setTransactionCost(0.0);
                 }
                 return;
             }
@@ -275,18 +277,18 @@ public class BTCPurchaseSaleFragment extends Fragment {
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     DecimalFormat decimalFormat = new DecimalFormat("#0.000000000");
                     Currency currency = Currency.valueOf(parent.getItemAtPosition(position).toString());
-                    paytureTransaction.setCurrency(currency);
+                    Application.getCurrentTransaction().setCurrency(currency);
 
-                    if ( paytureTransaction.getTransactionMode() == PaytureTransactionMode.PURCHASE &&
+                    if ( Application.getCurrentTransaction().getTransactionMode() == PaytureTransactionMode.PURCHASE &&
                             transactionPurchaseAmountEditText != null &&
                             transactionPurchaseAmountEditText.getText().length() != 0) {
-                        transactionPurchaseAmountEditText.setText(decimalFormat.format(paytureTransaction.getTransactionAmount()));
+                        transactionPurchaseAmountEditText.setText(decimalFormat.format(Application.getCurrentTransaction().getTransactionAmount()));
                     }
 
-                    if ( paytureTransaction.getTransactionMode() == PaytureTransactionMode.SALE &&
+                    if ( Application.getCurrentTransaction().getTransactionMode() == PaytureTransactionMode.SALE &&
                             transactionSaleAmountEditText != null &&
                             transactionSaleAmountEditText.getText().length() != 0) {
-                        transactionSaleAmountEditText.setText(decimalFormat.format(paytureTransaction.getTransactionAmount()));
+                        transactionSaleAmountEditText.setText(decimalFormat.format(Application.getCurrentTransaction().getTransactionAmount()));
                     }
                 }
 
@@ -294,15 +296,15 @@ public class BTCPurchaseSaleFragment extends Fragment {
                 public void onNothingSelected(AdapterView<?> parent) {
                     DecimalFormat decimalFormat = new DecimalFormat("#0.000000000");
                     Currency currency = Currency.USD;
-                    paytureTransaction.setCurrency(currency);
-                    if ( paytureTransaction.getTransactionMode() == PaytureTransactionMode.PURCHASE &&
+                    Application.getCurrentTransaction().setCurrency(currency);
+                    if ( Application.getCurrentTransaction().getTransactionMode() == PaytureTransactionMode.PURCHASE &&
                             transactionPurchaseAmountEditText != null) {
-                        transactionPurchaseAmountEditText.setText(decimalFormat.format(paytureTransaction.getTransactionAmount()));
+                        transactionPurchaseAmountEditText.setText(decimalFormat.format(Application.getCurrentTransaction().getTransactionAmount()));
                     }
 
-                    if ( paytureTransaction.getTransactionMode() == PaytureTransactionMode.SALE &&
+                    if ( Application.getCurrentTransaction().getTransactionMode() == PaytureTransactionMode.SALE &&
                             transactionSaleAmountEditText != null) {
-                        transactionSaleAmountEditText.setText(decimalFormat.format(paytureTransaction.getTransactionAmount()));
+                        transactionSaleAmountEditText.setText(decimalFormat.format(Application.getCurrentTransaction().getTransactionAmount()));
                     }
                 }
             });
@@ -326,10 +328,13 @@ public class BTCPurchaseSaleFragment extends Fragment {
             actionButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String text = "Operation : " + paytureTransaction.getTransactionMode().toString() + "\n";
+                    /*String text = "Operation : " + paytureTransaction.getTransactionMode().toString() + "\n";
                     text += "Amount : " + paytureTransaction.getTransactionAmount() + " BTC \n";
                     text += "Cost : " + paytureTransaction.getTransactionCost() + " " + paytureTransaction.getCurrency().toString();
-                    Toast.makeText(getContext(), text, Toast.LENGTH_SHORT ).show();
+                    Toast.makeText(getContext(), text, Toast.LENGTH_SHORT ).show();*/
+                    if ( getActivity() instanceof MainActivity) {
+                        ((MainActivity)getActivity()).openCardInfoEnterFragment();
+                    }
                 }
             });
         }
@@ -382,9 +387,9 @@ public class BTCPurchaseSaleFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putDouble(Tags.TAG_TRANSACTION_AMOUNT, paytureTransaction.getTransactionAmount());
-        outState.putDouble(Tags.TAG_TRANSACTION_COST, paytureTransaction.getTransactionCost());
-        outState.putString(Tags.TAG_CURRENCY, paytureTransaction.getCurrency().toString());
-        outState.putString(Tags.TAG_TRANSACTION_MODE, paytureTransaction.getTransactionMode().toString());
+        outState.putDouble(Tags.TAG_TRANSACTION_AMOUNT, Application.getCurrentTransaction().getTransactionAmount());
+        outState.putDouble(Tags.TAG_TRANSACTION_COST, Application.getCurrentTransaction().getTransactionCost());
+        outState.putString(Tags.TAG_CURRENCY, Application.getCurrentTransaction().getCurrency().toString());
+        outState.putString(Tags.TAG_TRANSACTION_MODE, Application.getCurrentTransaction().getTransactionMode().toString());
     }
 }

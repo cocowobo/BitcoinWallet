@@ -10,6 +10,7 @@ import com.simpleman.payture.bitcoinwallet.Utils.QRCodeFormatter;
 
 import org.bitcoinj.core.Address;
 import org.bitcoinj.core.Coin;
+import org.bitcoinj.utils.Threading;
 import org.bitcoinj.wallet.Wallet;
 import org.bitcoinj.wallet.listeners.WalletChangeEventListener;
 
@@ -31,12 +32,7 @@ public class BitcoinWallet {
 
     public final void setWallet(Wallet wallet) {
 
-        wallet.addChangeEventListener(new Executor() {
-            @Override
-            public void execute(@NonNull Runnable command) {
-                new Thread(command).start();
-            }
-        }, new WalletChangeEventListener() {
+        wallet.addChangeEventListener(Threading.USER_THREAD, new WalletChangeEventListener() {
             @Override
             public void onWalletChanged(Wallet wallet) {
                 update(wallet);

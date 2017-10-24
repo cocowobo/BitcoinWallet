@@ -21,6 +21,7 @@ public class Application {
         state = ApplicationState.DASHBOARD;
         walletController = new BitcoinWalletController(context);
         wallet = walletController.getBitcoinWallet();
+        transaction = new PaytureTransaction();
 
         try {
             walletController.setupWalletAppKit(null, user.getWalletFileName());
@@ -41,6 +42,7 @@ public class Application {
     private static ApplicationState state;
     private static User user;
     private static BitcoinWallet wallet;
+    private static PaytureTransaction transaction;
 
     private static BitcoinWalletController walletController;
 
@@ -54,6 +56,14 @@ public class Application {
 
     public static User getUser() {
         return user;
+    }
+
+    public static PaytureTransaction getCurrentTransaction() {
+        return transaction;
+    }
+
+    public static void resetCurrentTransaction(){
+        transaction = new PaytureTransaction();
     }
 
     public static BitcoinWallet getWallet() {

@@ -18,12 +18,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.simpleman.payture.bitcoinwallet.Application.Application;
 import com.simpleman.payture.bitcoinwallet.Application.ApplicationState;
+import com.simpleman.payture.bitcoinwallet.Application.PaytureTransactionMode;
 import com.simpleman.payture.bitcoinwallet.Application.User;
 import com.simpleman.payture.bitcoinwallet.BitcoinWallet.OnProgressListener;
 import com.simpleman.payture.bitcoinwallet.BitcoinWallet.OnSyncCompletedListener;
 import com.simpleman.payture.bitcoinwallet.BitcoinWallet.OnWalletAppKitSetupListener;
 import com.simpleman.payture.bitcoinwallet.R;
 import com.simpleman.payture.bitcoinwallet.UI.UIFragments.BTCBuySell.BTCPurchaseSaleFragment;
+import com.simpleman.payture.bitcoinwallet.UI.UIFragments.BTCBuySell.CardInfoFullEnterFragment;
 import com.simpleman.payture.bitcoinwallet.UI.UIFragments.BTCPriceChart.BTCPriceChartFragment;
 import com.simpleman.payture.bitcoinwallet.UI.UIFragments.BTCPriceInfo.BTCPriceInfoFragment;
 import com.simpleman.payture.bitcoinwallet.Utils.QRCodeFormatter;
@@ -166,7 +168,6 @@ public class MainActivity extends AppCompatActivity
                 {
                     if (!Application.getState().equals(ApplicationState.PURCHASE)) {
                         mainFragment = new BTCPurchaseSaleFragment();
-                        //mainFragment = BTCPurchaseFragment.newInstance();
                         fragmentManager.beginTransaction().replace(R.id.main_frame, mainFragment).commit();
                     }
                     Application.setState(ApplicationState.PURCHASE);
@@ -241,6 +242,15 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+    }
+
+    public void openCardInfoEnterFragment() {
+
+        if ( Application.getCurrentTransaction().getTransactionMode() == PaytureTransactionMode.PURCHASE) {
+            mainFragment = new CardInfoFullEnterFragment();
+            fragmentManager.beginTransaction().replace(R.id.main_frame, mainFragment).commit();
+        }
+        return;
     }
 
 }
