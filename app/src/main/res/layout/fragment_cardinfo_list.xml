@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/btc_transaction_info_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:background="@color/frameBackground"
+        android:layout_marginLeft="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginTop="0dp"
+        android:paddingBottom="8dp"
+        android:visibility="invisible"
+        app:layout_constraintHorizontal_bias="0.0">
+
+        <TextView
+            android:id="@+id/btc_transaction_info_header"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:padding="5dp"
+            android:text="default_transaction_type"
+            android:textColor="@color/frameBackground"
+            android:textSize="20dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/btc_transaction_info_amount_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/btc_transaction_info_header"
+            android:text="@string/card_info_amount_label"
+            android:padding="5dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="8dp"
+            android:textSize="20dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginStart="8dp" />
+
+        <TextView
+            android:id="@+id/btc_transaction_info_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="some BTC"
+            android:padding="5dp"
+            app:layout_constraintLeft_toRightOf="@+id/btc_transaction_info_amount_label"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:textSize="20dp"
+            app:layout_constraintTop_toBottomOf="@+id/btc_transaction_info_header"
+            android:layout_marginStart="16dp" />
+
+        <TextView
+            android:id="@+id/btc_transaction_info_cost_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/btc_transaction_info_amount_label"
+            android:text="@string/card_info_cost_label"
+            android:padding="5dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="8dp"
+            android:textSize="20dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginStart="8dp" />
+
+        <TextView
+            android:id="@+id/btc_transaction_info_cost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="some USD"
+            android:padding="5dp"
+            app:layout_constraintLeft_toRightOf="@+id/btc_transaction_info_amount_label"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:textSize="20dp"
+            app:layout_constraintTop_toBottomOf="@+id/btc_transaction_info_amount_label"
+            android:layout_marginStart="16dp" />
+
+
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/card_info_cardlist_recyclerview"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:visibility="invisible"
+        app:layout_constraintTop_toBottomOf="@+id/btc_transaction_info_layout"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintHorizontal_bias="0.0"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/card_info_add_card_button" />
+
+
+    <Button
+        android:id="@+id/card_info_cancel_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/card_info_cancel_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="0dp"
+        android:textColor="@color/frameBackground"
+        android:background="@color/colorDanger"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="0dp" />
+
+    <Button
+        android:id="@+id/card_info_add_card_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/card_info_add_card_button"
+        android:background="@color/frameBackground"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginStart="8dp"
+        app:layout_constraintLeft_toRightOf="@+id/card_info_cancel_button"
+        app:layout_constraintHorizontal_bias="0.0" />
+
+
+
+</android.support.constraint.ConstraintLayout>

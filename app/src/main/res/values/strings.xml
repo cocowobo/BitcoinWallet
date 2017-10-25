@@ -45,6 +45,8 @@
     <string name="card_info_hint_cardholder_name">cardholder name</string>
     <string name="card_info_action_button">done</string>
     <string name="card_info_cancel_button">cancel</string>
+    <string name="card_info_add_card_button">add new card</string>
+
 
 
     <string name="wallet_address_dialog_title">Адрес биткойн кошелька</string>

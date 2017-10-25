@@ -7,5 +7,6 @@
     <color name="mainBackground">#BEBEBE</color>
     <color name="frameBackground">#FFFFFF</color>
     <color name="colorDanger">#F03939</color>
+    <color name="colorInfo">#FFFFFF</color>
     <color name="black">#000000</color>
 </resources>

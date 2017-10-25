@@ -25,13 +25,11 @@ import com.simpleman.payture.bitcoinwallet.BitcoinWallet.OnSyncCompletedListener
 import com.simpleman.payture.bitcoinwallet.BitcoinWallet.OnWalletAppKitSetupListener;
 import com.simpleman.payture.bitcoinwallet.R;
 import com.simpleman.payture.bitcoinwallet.UI.UIFragments.BTCBuySell.BTCPurchaseSaleFragment;
-import com.simpleman.payture.bitcoinwallet.UI.UIFragments.BTCBuySell.CardInfoFullEnterFragment;
+import com.simpleman.payture.bitcoinwallet.UI.UIFragments.BTCBuySell.SelectCardFragment;
+import com.simpleman.payture.bitcoinwallet.UI.UIFragments.BTCBuySell.UnknownCardFragment;
 import com.simpleman.payture.bitcoinwallet.UI.UIFragments.BTCPriceChart.BTCPriceChartFragment;
 import com.simpleman.payture.bitcoinwallet.UI.UIFragments.BTCPriceInfo.BTCPriceInfoFragment;
-import com.simpleman.payture.bitcoinwallet.Utils.QRCodeFormatter;
 import com.simpleman.payture.bitcoinwallet.Utils.Tags;
-import org.bitcoinj.core.Address;
-import org.bitcoinj.uri.BitcoinURI;
 
 
 public class MainActivity extends AppCompatActivity
@@ -123,8 +121,8 @@ public class MainActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+        // TODO: 10/25/2017 Продумать сохранение фрагментов при переходе назад 
     }
-
     // TODO: 12.09.2017 продумать и добавить опции меню 
     /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -245,12 +243,23 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void openCardInfoEnterFragment() {
-
-        if ( Application.getCurrentTransaction().getTransactionMode() == PaytureTransactionMode.PURCHASE) {
-            mainFragment = new CardInfoFullEnterFragment();
-            fragmentManager.beginTransaction().replace(R.id.main_frame, mainFragment).commit();
-        }
+        mainFragment = new SelectCardFragment();
+        fragmentManager.beginTransaction().replace(R.id.main_frame, mainFragment).commit();
         return;
     }
+
+    public void openPurchaseSaleFragment() {
+        mainFragment = new BTCPurchaseSaleFragment();
+        fragmentManager.beginTransaction().replace(R.id.main_frame, mainFragment).commit();
+        return;
+    }
+
+    public void openUnknownCardFragment() {
+        mainFragment = new UnknownCardFragment();
+        fragmentManager.beginTransaction().replace(R.id.main_frame, mainFragment).commit();
+        return;
+    }
+
+    public void openConfirmCardFragment(){}
 
 }

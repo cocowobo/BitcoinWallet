@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:padding="5dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/cardlist_item_panmask"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="424242xxxxxx4242"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="4dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="4dp"
+        app:layout_constraintVertical_bias="0.714"
+        app:layout_constraintLeft_toRightOf="@+id/cardlist_item_ipsIcon"
+        android:layout_marginLeft="8dp" />
+
+    <ImageView
+        android:id="@+id/cardlist_item_ipsIcon"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        app:srcCompat="@drawable/card_default"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="4dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <!--TextView
+        android:id="@+id/cardlist_item_cardholder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="default name"
+        android:textSize="20dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBaseline_toBaselineOf="@+id/cardlist_item_panmask" /-->
+
+
+</android.support.constraint.ConstraintLayout>
