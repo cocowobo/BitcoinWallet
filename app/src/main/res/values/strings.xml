@@ -42,6 +42,7 @@
     <string name="card_info_hint_pan">4242 4242 4242 4242</string>
     <string name="card_info_hint_cvv">123</string>
     <string name="card_info_hint_month_year_exp">MM/YY</string>
+    <string name="card_info_save_card">save card</string>
     <string name="card_info_hint_cardholder_name">cardholder name</string>
     <string name="card_info_action_button">done</string>
     <string name="card_info_cancel_button">cancel</string>

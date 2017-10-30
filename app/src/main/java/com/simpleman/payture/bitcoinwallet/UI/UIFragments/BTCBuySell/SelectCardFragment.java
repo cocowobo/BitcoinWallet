@@ -11,8 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.simpleman.payture.bitcoinwallet.Application.Application;
@@ -27,9 +29,8 @@ import java.util.List;
 public class SelectCardFragment extends Fragment {
 
     //private EditText PANEditText;
-    private RecyclerView cardlistRecyclerView;
-    private RecyclerView.Adapter recyclerViewAdapter;
-    private RecyclerView.LayoutManager layoutManager;
+
+    private Spinner cardlistSpinner;
 
     private Button cancelButton;
     private Button newCardButton;
@@ -41,7 +42,7 @@ public class SelectCardFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_cardinfo_list, container, false);
+        return inflater.inflate(R.layout.fragment_cardinfo_latest, container, false);
     }
 
     @Override
@@ -72,42 +73,32 @@ public class SelectCardFragment extends Fragment {
 
     private void initCardInfoRecyclerView() {
         final List<RegisteredCard> cards = initTestData(); // = Application.getUser().getCards();
-        cardlistRecyclerView = (RecyclerView)getView().findViewById(R.id.card_info_cardlist_recyclerview);
-        layoutManager = new LinearLayoutManager(getContext());
 
-        recyclerViewAdapter = new CardListAdapter(getContext(), cards){
+        cardlistSpinner = (Spinner)getView().findViewById(R.id.card_info_select_card_spinner);
+        CardListAdapterLatest adapter = new CardListAdapterLatest(cards, getContext());
+        if (adapter.getCount() <= 1) cardlistSpinner.setClickable(false);
+        cardlistSpinner.setAdapter(adapter);
+        cardlistSpinner.setSelection(0);
+        cardlistSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             @Override
-            public void onItemClick(int index) {
-                //((MainActivity)getActivity()).openConfirmCardFragment(cards.get(index));
-            }
-        };
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                final int real_index = position - 1;
 
-        if (cardlistRecyclerView != null) {
-            cardlistRecyclerView.setLayoutManager(layoutManager);
-            cardlistRecyclerView.setAdapter(recyclerViewAdapter);
-        }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         return;
     }
 
     // Test method!!!
     private List<RegisteredCard> initTestData() {
         List<RegisteredCard> list = new ArrayList<>();
-        list.add(new RegisteredCard("a6d24342-e93e-4b42-ae76-626bfa03e158", "411111xxxxxx1112", "Ivan Ivanov"));
-        list.add(new RegisteredCard("19d25532-10fa-bb21-ae76-62ccfa13e174", "411111xxxxxx1111", "Peter Ivanov"));
-        list.add(new RegisteredCard("a6d24342-e93e-4b42-ae76-626bfa03e158", "411111xxxxxx1112", "Ivan Ivanov"));
-        list.add(new RegisteredCard("19d25532-10fa-bb21-ae76-62ccfa13e174", "411111xxxxxx1111", "Peter Ivanov"));
-        list.add(new RegisteredCard("a6d24342-e93e-4b42-ae76-626bfa03e158", "411111xxxxxx1112", "Ivan Ivanov"));
-        list.add(new RegisteredCard("19d25532-10fa-bb21-ae76-62ccfa13e174", "411111xxxxxx1111", "Peter Ivanov"));
-        list.add(new RegisteredCard("a6d24342-e93e-4b42-ae76-626bfa03e158", "411111xxxxxx1112", "Ivan Ivanov"));
-        list.add(new RegisteredCard("19d25532-10fa-bb21-ae76-62ccfa13e174", "411111xxxxxx1111", "Peter Ivanov"));
-        list.add(new RegisteredCard("a6d24342-e93e-4b42-ae76-626bfa03e158", "411111xxxxxx1112", "Ivan Ivanov"));
-        list.add(new RegisteredCard("19d25532-10fa-bb21-ae76-62ccfa13e174", "411111xxxxxx1111", "Peter Ivanov"));
-        list.add(new RegisteredCard("a6d24342-e93e-4b42-ae76-626bfa03e158", "411111xxxxxx1112", "Ivan Ivanov"));
-        list.add(new RegisteredCard("19d25532-10fa-bb21-ae76-62ccfa13e174", "411111xxxxxx1111", "Peter Ivanov"));
-        list.add(new RegisteredCard("a6d24342-e93e-4b42-ae76-626bfa03e158", "411111xxxxxx1112", "Ivan Ivanov"));
-        list.add(new RegisteredCard("19d25532-10fa-bb21-ae76-62ccfa13e174", "411111xxxxxx1111", "Peter Ivanov"));
-        list.add(new RegisteredCard("a6d24342-e93e-4b42-ae76-626bfa03e158", "411111xxxxxx1112", "Ivan Ivanov"));
-        list.add(new RegisteredCard("19d25532-10fa-bb21-ae76-62ccfa13e174", "411111xxxxxx1111", "Peter Ivanov"));
+        list.add(new RegisteredCard("a6d24342-e93e-4b42-ae76-626bfa03e158", "411111xxxxxx1111", "Ivan Ivanov"));
+        list.add(new RegisteredCard("19d25532-10fa-bb21-ae76-62ccfa13e174", "555111xxxxxx1123", "Peter Ivanov"));
         return list;
     }
 
